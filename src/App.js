@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import {db} from './firebase-config'
+import {collection, getDocs} from 'firebase/firestore'
+import {useState, useEffect} from 'react'
 
 function App() {
+  const [fileTest, setFileTest] = useState([])
+  //"test" is the state
+  const fileTestCollectionRef = collection(db, "fileTest")
+
+  useEffect(()=>{
+    const getFileTest = async () =>{
+      const data = await getDocs(fileTestCollectionRef)
+      console.log(data)
+      setFileTest(data.docs.map((doc)=>({...doc.data(), id: doc.id})))
+    }
+
+    getFileTest()
+  },[])
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {fileTest.map((item)=>{
+        return(
+          <div key={item.id}>
+          {""}
+          <h1>Title: {item.Title}</h1>
+          <h1>Doc Info: {item.docInfo}</h1>
+          </div>
+        )
+      })}
     </div>
   );
 }
