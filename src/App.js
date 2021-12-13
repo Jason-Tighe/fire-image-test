@@ -1,5 +1,10 @@
 import {db} from './firebase-config'
-import {collection, getDocs, addDoc} from 'firebase/firestore'
+import { collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,} from 'firebase/firestore'
 import {useState, useEffect} from 'react'
 
 function App() {
@@ -17,6 +22,17 @@ const handleDocInfoChange = e => {
 setNewDocInfo({ ...newDocInfo, [e.target.name]: e.target.value});
 };
 
+const updateTest = async (id, docInfo)=>{
+  const testDoc = doc(db, "fileTest", id)
+  const newFields = {docInfo: ""}
+  await updateDoc(testDoc, newFields)
+}
+
+const deleteTest = async (id) =>{
+  const testDoc = doc(db, "fileTest", id)
+  await deleteDoc(testDoc)
+}
+
   useEffect(()=>{
     //this is getting and setting all items from the collection. I'll refernce how i've written stuff like this before.
     const getFileTest = async () =>{
@@ -27,19 +43,19 @@ setNewDocInfo({ ...newDocInfo, [e.target.name]: e.target.value});
 
     getFileTest()
   },[])
-//have to look at this
+// have to look at this. Changed the onChange from the scaleable functino to a prop. It messed up because of the "name"
   const createTest = async () => {
     await addDoc(fileTestCollectionRef, {Title: newTitle, docInfo: newDocInfo})
   }
   return (
     <div className="App">
     <input
-      name="title"
+      name="Title"
       placeholder="Title"
       onChange={handleTitleChange}
     />
     <input
-      name="docInfo"
+      name="DocInfo"
       placeholder="DocInfo"
       onChange={handleDocInfoChange}
     />
