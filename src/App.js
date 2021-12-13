@@ -1,4 +1,4 @@
-import {db} from './firebase-config'
+import {db, storage} from './firebase-config'
 import { collection,
   getDocs,
   addDoc,
@@ -13,6 +13,16 @@ function App() {
   const fileTestCollectionRef = collection(db, "fileTest")
   const [newTitle, setNewTitle] = useState("")
   const [newDocInfo, setNewDocInfo] = useState("")
+
+  const [image, setImage] = useState(null)
+
+  const handleChange = e =>{
+    if(e.target.files[0]){}
+  }
+
+  const handleUpload = e =>{
+
+  }
 
   const handleTitleChange = e => {
   setNewTitle({ ...newTitle, [e.target.name]: e.target.value });
@@ -91,8 +101,17 @@ const deleteTest = async (id) =>{
           </div>
         )
       })}
+
+    <div>
+    <input type="file" onChange={handleChange}/>
+    <button
+    onClick={handleUpload}
+    >UpLoad</button>
+
     </div>
-  );
+
+    </div>
+  )
 }
 
 export default App;
