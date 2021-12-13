@@ -50,14 +50,16 @@ const deleteTest = async (id) =>{
   return (
     <div className="App">
     <input
-      name="Title"
       placeholder="Title"
-      onChange={handleTitleChange}
+      onChange={(event) => {
+         setNewTitle(event.target.value);
+       }}
     />
     <input
-      name="DocInfo"
       placeholder="DocInfo"
-      onChange={handleDocInfoChange}
+      onChange={(event) => {
+         setNewDocInfo(event.target.value);
+       }}
     />
     <button onClick={createTest}> Create User</button>
 
@@ -70,6 +72,22 @@ const deleteTest = async (id) =>{
           {""}
           <h1>Title: {item.Title}</h1>
           <h1>Doc Info: {item.docInfo}</h1>
+          <button
+             onClick={() => {
+               updateTest(item.id, item.Title);
+             }}
+           >
+             {" "}
+             Increase Age
+           </button>
+          <button
+             onClick={() => {
+               deleteTest(item.id);
+             }}
+           >
+             {" "}
+             Delete User
+           </button>
           </div>
         )
       })}
