@@ -1,4 +1,6 @@
-import {db, storage} from './firebase-config'
+import {db, storage, storageRef} from './firebase-config'
+import {getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage"
+
 import { collection,
   getDocs,
   addDoc,
@@ -14,15 +16,40 @@ function App() {
   const [newTitle, setNewTitle] = useState("")
   const [newDocInfo, setNewDocInfo] = useState("")
 
+
   const [image, setImage] = useState(null)
 
+
   const handleChange = e =>{
-    if(e.target.files[0]){}
+    if(e.target.files[0]){
+      setImage(e.target.files[0])
+
+    }
   }
 
-  const handleUpload = e =>{
 
+//creating the storage, .ref is the refernce creating a new folder id, ".put" uploading.
+//.on, snapshot = current progress, error checking,
+const handleUpload = () => {
+  const metadata = {
+    contentType: 'images/png'
   }
+  const storageRef = ref(storage, "Images/"+ image.name);
+  const uploadTask = uploadBytesResumable(storageRef, image, metadata)
+  uploadTask.on('state_changed',
+  (snapshot) => {
+    },
+  (error) =>{
+    console.log("oops")
+  },
+  () =>{
+    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      console.log('File available at', downloadURL);
+    })
+  }
+)
+
+};
 
   const handleTitleChange = e => {
   setNewTitle({ ...newTitle, [e.target.name]: e.target.value });
