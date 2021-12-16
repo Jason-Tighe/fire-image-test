@@ -15,7 +15,7 @@ function App() {
   const fileTestCollectionRef = collection(db, "fileTest")
   const [newTitle, setNewTitle] = useState("")
   const [newDocInfo, setNewDocInfo] = useState("")
-
+  const [link, setLink] = useState("")
 
   const [image, setImage] = useState(null)
 
@@ -44,6 +44,7 @@ const handleUpload = () => {
   },
   () =>{
     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      setLink(downloadURL)
       console.log('File available at', downloadURL);
     })
   }
@@ -84,6 +85,7 @@ const deleteTest = async (id) =>{
   const createTest = async () => {
     await addDoc(fileTestCollectionRef, {Title: newTitle, docInfo: newDocInfo})
   }
+
   return (
     <div className="App">
     <input
@@ -131,6 +133,7 @@ const deleteTest = async (id) =>{
 
     <div>
     <input type="file" onChange={handleChange}/>
+    <h1>Here is your Link: {link} </h1>
     <button
     onClick={handleUpload}
     >UpLoad</button>
