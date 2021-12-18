@@ -27,9 +27,9 @@ function App() {
     }
   }
 
-
-//creating the storage, .ref is the refernce creating a new folder id, ".put" uploading.
-//.on, snapshot = current progress, error checking,
+//
+// creating the storage, .ref is the refernce creating a new folder id, ".put" uploading.
+// .on, snapshot = current progress, error checking,
 const handleUpload = () => {
   const metadata = {
     contentType: 'images/png'
@@ -51,6 +51,26 @@ const handleUpload = () => {
 )
 
 };
+
+// const handleUpload = () => {
+//   const uploadTask = storage.ref(`fileTest/${image.name}`).put(image)
+//   uploadTask.on(
+//     "state_changed",
+//     snapshot=>{},
+//     error=>{
+//       console.log(error)
+//     },
+//     ()=>{
+//       storage
+//         .ref("fileTest")
+//         .child(image.name)
+//         .getDownloadURL()
+//         .then(url=>{
+//           setLink(url)
+//         })
+//     }
+//   )
+// }
 
   const handleTitleChange = e => {
   setNewTitle({ ...newTitle, [e.target.name]: e.target.value });
@@ -137,6 +157,14 @@ const deleteTest = async (id) =>{
     <button
     onClick={handleUpload}
     >UpLoad</button>
+    <input
+      placeholder="Title"
+      value={link}
+      onChange={(event) => {
+         setNewTitle(event.target.value);
+       }}
+    />
+    <button onClick={createTest}> Create User</button>
 
     </div>
 
