@@ -90,14 +90,24 @@ const deleteTest = async (id) =>{
   const testDoc = doc(db, "fileTest", id)
   await deleteDoc(testDoc)
 }
+//broken atm
+const getFileTest = async () =>{
+  const data = await getDocs(fileTestCollectionRef)
+  console.log(data)
+  setFileTest(data.docs.map((doc)=>({...doc.data(), id: doc.id})))
+
+  // ref.onSnapshot((querySnapshot)=>{
+  //   const items = []
+  //   querySnapshot.forEach((doc)=>{
+  //     items.push(doc.data())
+  //   })
+  //   setFileTest(items)
+  // })
+}
 
   useEffect(()=>{
     //this is getting and setting all items from the collection. I'll refernce how i've written stuff like this before.
-    const getFileTest = async () =>{
-      const data = await getDocs(fileTestCollectionRef)
-      console.log(data)
-      setFileTest(data.docs.map((doc)=>({...doc.data(), id: doc.id})))
-    }
+
 
     getFileTest()
   },[])
