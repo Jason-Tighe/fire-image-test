@@ -6,7 +6,8 @@ import { collection,
   addDoc,
   updateDoc,
   deleteDoc,
-  doc,} from 'firebase/firestore'
+  doc,
+  onSnapshot} from 'firebase/firestore'
 import {useState, useEffect} from 'react'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
   const [link, setLink] = useState("")
 
   const [image, setImage] = useState(null)
+  const [files, setFiles] = useState();
 
 
   const handleChange = e =>{
@@ -27,14 +29,29 @@ function App() {
     }
   }
 
-//
+
+
+  const fetchImages = async () => {
+        let result = await storage.ref().child("Name Of Your Files Map in storage").listAll();
+        let urlPromises = result.items.map((imageRef) =>
+          imageRef.getDownloadURL()
+        );
+
+        return Promise.all(urlPromises);
+      };
+
+      const loadImages = async () => {
+        const urls = await fetchImages();
+        setFiles(urls);
+      };
+
 // creating the storage, .ref is the refernce creating a new folder id, ".put" uploading.
 // .on, snapshot = current progress, error checking,
 const handleUpload = () => {
   const metadata = {
     contentType: 'images/png'
   }
-  const storageRef = ref(storage, "Images/"+ image.name);
+  const storageRef = ref(storage, "Images/" + image.name);
   const uploadTask = uploadBytesResumable(storageRef, image, metadata)
   uploadTask.on('state_changed',
   (snapshot) => {
@@ -92,29 +109,44 @@ const deleteTest = async (id) =>{
 }
 //broken atm
 const getFileTest = async () =>{
-  const data = await getDocs(fileTestCollectionRef)
-  console.log(data)
-  setFileTest(data.docs.map((doc)=>({...doc.data(), id: doc.id})))
-
-  // ref.onSnapshot((querySnapshot)=>{
-  //   const items = []
-  //   querySnapshot.forEach((doc)=>{
+  //this works, but this requires that the useEffect has a dependency for fileTest.
+  // const items = []
+  // const querySnapshot = await getDocs(fileTestCollectionRef)
+  // querySnapshot.forEach((doc)=>{
   //     items.push(doc.data())
   //   })
-  //   setFileTest(items)
-  // })
+  // setFileTest(items)
+
+
+  //this works fine, but is rough to read.
+  // const data = await getDocs(fileTestCollectionRef)
+  // console.log(data)
+  // setFileTest(data.docs.map((doc)=>({...doc.data(), id: doc.id})))
+
+
+  //this was recomended through a video, but doesn't work, but if it does it won't require a dependency for useEffect.
+  //I'm able to get this to work now. the example have ref.onSnapshot, but that doens't seem to be a thing
+  const abc = onSnapshot(fileTestCollectionRef, (querySnapshot)=>{
+    const items = []
+    querySnapshot.forEach((doc)=>{
+      items.push(doc.data())
+    })
+    setFileTest(items)
+  })
 }
 
   useEffect(()=>{
     //this is getting and setting all items from the collection. I'll refernce how i've written stuff like this before.
 
-
+    loadImages();
     getFileTest()
   },[])
 // have to look at this. Changed the onChange from the scaleable functino to a prop. It messed up because of the "name"
   const createTest = async () => {
     await addDoc(fileTestCollectionRef, {Title: newTitle, docInfo: newDocInfo})
   }
+
+  // var imageTest = storageRef("Images/crown.png")
 
   return (
     <div className="App">
@@ -162,11 +194,14 @@ const getFileTest = async () =>{
       })}
 
     <div>
+    {""}
+    <div> Uploading an image to storage</div>
     <input type="file" onChange={handleChange}/>
-    <h1>Here is your Link: {link} </h1>
     <button
     onClick={handleUpload}
     >UpLoad</button>
+    <h1>Here is your Link: {link} </h1>
+
     <input
       placeholder="Title"
       value={link}
@@ -177,7 +212,7 @@ const getFileTest = async () =>{
     <button onClick={createTest}> Create User</button>
 
     </div>
-
+    <image style={{height: 200, width: 200}} source={files}/>
     </div>
   )
 }
