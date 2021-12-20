@@ -212,7 +212,7 @@ const getFileTest = async () =>{
     <button onClick={createTest}> Create User</button>
 
     </div>
-    <image style={{height: 200, width: 200}} src={link}/>
+    <img src={link} alt="..." />
     </div>
   )
 }
