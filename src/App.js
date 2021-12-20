@@ -31,19 +31,19 @@ function App() {
 
 
 
-  const fetchImages = async () => {
-        let result = await storage.ref().child("Name Of Your Files Map in storage").listAll();
-        let urlPromises = result.items.map((imageRef) =>
-          imageRef.getDownloadURL()
-        );
-
-        return Promise.all(urlPromises);
-      };
-
-      const loadImages = async () => {
-        const urls = await fetchImages();
-        setFiles(urls);
-      };
+  // const fetchImages = async () => {
+  //       let result = await storage.ref().child("Name Of Your Files Map in storage").listAll();
+  //       let urlPromises = result.items.map((imageRef) =>
+  //         imageRef.getDownloadURL()
+  //       );
+  //
+  //       return Promise.all(urlPromises);
+  //     };
+  //
+  //     const loadImages = async () => {
+  //       const urls = await fetchImages();
+  //       setFiles(urls);
+  //     };
 
 // creating the storage, .ref is the refernce creating a new folder id, ".put" uploading.
 // .on, snapshot = current progress, error checking,
@@ -138,7 +138,7 @@ const getFileTest = async () =>{
   useEffect(()=>{
     //this is getting and setting all items from the collection. I'll refernce how i've written stuff like this before.
 
-    loadImages();
+    // loadImages();
     getFileTest()
   },[])
 // have to look at this. Changed the onChange from the scaleable functino to a prop. It messed up because of the "name"
@@ -212,7 +212,7 @@ const getFileTest = async () =>{
     <button onClick={createTest}> Create User</button>
 
     </div>
-    <image style={{height: 200, width: 200}} source={files}/>
+    <image style={{height: 200, width: 200}} src={link}/>
     </div>
   )
 }
