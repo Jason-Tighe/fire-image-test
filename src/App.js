@@ -8,7 +8,9 @@ import { collection,
   deleteDoc,
   doc,
   onSnapshot} from 'firebase/firestore'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
+import QRCode from "qrcode.react";
+
 
 function App() {
   const [fileTest, setFileTest] = useState([])
@@ -28,8 +30,54 @@ function App() {
 
     }
   }
+const [qrName, setQrName] = useState("qrImage.png")
+const [cubeFace, setCubeFace] = useState({
+    link: ""
+  });
+
+const qrRef = useRef();
+
+const downloadQRCode = (e) => {
+  e.preventDefault();
+  let canvas = qrRef.current.querySelector("canvas");
+  console.log(canvas);
+  let image = canvas.toDataURL("image/png");
+  console.log(image);
+  let anchor = document.createElement("a");
+  anchor.href = image;
+  anchor.download = {qrName};
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+
+  setCubeFace({
+    link: ""
+  });
+};
+
+const handleQRChange = (e) => {
+    setCubeFace({ ...cubeFace, [e.target.name]: e.target.value });
+  };
+
+const handleNameChange = (e)=>{
+  setQrName({ ...qrName, [e.target.name]: e.target.value })
+}
 
 
+  const code = (
+     <QRCode
+       level="Q"
+       value={cubeFace.link}
+       // imageSettings={{
+       //   src: `${facebook}`,
+       //   x: null,
+       //   y: null,
+       //   height: 24,
+       //   width: 24,
+       //   excavate: true
+       // }}
+     />
+   );
 
   // const fetchImages = async () => {
   //       let result = await storage.ref().child("Name Of Your Files Map in storage").listAll();
@@ -213,6 +261,41 @@ const getFileTest = async () =>{
 
     </div>
     <img src={link} alt="..." />
+
+
+    <>
+    <form onSubmit={downloadQRCode}>
+       <h1>Hello QRCode Test</h1>
+       <input
+        id="qrName"
+        type="text"
+        name="qrName"
+        value={qrName}
+        onChange={handleNameChange}
+       />
+       <lable htmlFor="qrName">Image Name </lable>
+       <input
+       id="link"
+       type="text"
+       name="link"
+       value={cubeFace.link}
+       onChange={handleQRChange}
+       />
+       <lable htmlFor="link"> Link </lable>
+
+     <h2>Add a link!</h2>
+
+     {""}
+     <button type="submit"> Download QR code image </button>
+   </form>
+   <div className="qr-container__qr-code" ref={qrRef}>
+     {code}
+   </div>
+
+
+    </>
+
+
     </div>
   )
 }
