@@ -30,22 +30,31 @@ function App() {
 
     }
   }
-const [qrName, setQrName] = useState("qrImage.png")
+const [qrName, setQrName] = useState("")
 const [cubeFace, setCubeFace] = useState({
     link: ""
   });
 
 const qrRef = useRef();
-
-const downloadQRCode = (e) => {
+//this basically creates the image and allows us to download the image.
+const downloadQRCode = (e, props) => {
+  //prevents reload obv
   e.preventDefault();
+  //gets the canvas from the "dom"
   let canvas = qrRef.current.querySelector("canvas");
   console.log(canvas);
+  //converts the qrRef(the QR code) to an image
+  //I might just need set "image" as something
   let image = canvas.toDataURL("image/png");
   console.log(image);
+  //creates an anchor tag
   let anchor = document.createElement("a");
+  //makes the href of the tag to be the image
   anchor.href = image;
-  anchor.download = {qrName};
+  //the name of the download
+  //does not work if just using {qrName}, just use qrName
+  anchor.download = qrName
+  console.log(qrName)
   document.body.appendChild(anchor);
   anchor.click();
   document.body.removeChild(anchor);
@@ -53,6 +62,7 @@ const downloadQRCode = (e) => {
   setCubeFace({
     link: ""
   });
+  setQrName("");
 };
 
 const handleQRChange = (e) => {
@@ -60,7 +70,7 @@ const handleQRChange = (e) => {
   };
 
 const handleNameChange = (e)=>{
-  setQrName({ ...qrName, [e.target.name]: e.target.value })
+  setQrName(e.target.value )
 }
 
 
@@ -155,7 +165,7 @@ const deleteTest = async (id) =>{
   const testDoc = doc(db, "fileTest", id)
   await deleteDoc(testDoc)
 }
-//broken atm
+
 const getFileTest = async () =>{
   //this works, but this requires that the useEffect has a dependency for fileTest.
   // const items = []
@@ -248,6 +258,13 @@ const getFileTest = async () =>{
     <button
     onClick={handleUpload}
     >UpLoad</button>
+    {/* basically the handleupload needs to be recreated for the new image to work.
+      basically, once it creates a the image with downloadQRcode i would then need to fill this input as with that new file?
+      maybe if i just do an if statement of like
+      "If value state is 0 then "", else valueState?" Can I even do something like this?
+      Maybe it'd just be best to create a second input pass the value into that like regular
+
+      */}
     <h1>Here is your Link: {link} </h1>
 
     <input
@@ -267,9 +284,11 @@ const getFileTest = async () =>{
     <form onSubmit={downloadQRCode}>
        <h1>Hello QRCode Test</h1>
        <input
-        id="qrName"
+        id="name"
         type="text"
-        name="qrName"
+        name="title"
+        placeholder="name your file"
+
         value={qrName}
         onChange={handleNameChange}
        />
@@ -278,6 +297,8 @@ const getFileTest = async () =>{
        id="link"
        type="text"
        name="link"
+       placeholder="add your link"
+
        value={cubeFace.link}
        onChange={handleQRChange}
        />
