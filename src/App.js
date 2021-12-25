@@ -14,12 +14,19 @@ import QRCode from "qrcode.react";
 
 function App() {
   const fileTestCollectionRef = collection(db, "fileTest")
+//1
   const [fileTest, setFileTest] = useState([])
+//2
   const [newTitle, setNewTitle] = useState("")
+//3
   const [newDocInfo, setNewDocInfo] = useState("")
+//4
   const [link, setLink] = useState("")
+//5
   const [qrCode, setQrCode] =useState(null)
+//6
   const [image, setImage] = useState(null)
+//7
   const [files, setFiles] = useState();
 
 
@@ -34,29 +41,20 @@ const [cubeFace, setCubeFace] = useState({
     link: ""
   });
 
-  const handleLinkUpload = () => {
+//i have to set qrCode to the url String before uploading.
+  const handleLinkUpload = (e) => {
+    e.preventDefault();
     const metadata = {
       contentType: 'images/png'
     }
     // Data URL string
     const message = qrCode
     console.log(message)
-    const storageRef = ref(storage, "qrLinks/" + message);
-    const uploadTask = uploadBytesResumable(storageRef, image, metadata)
-    uploadTask.on('state_changed',
-    (snapshot) => {
-      },
-    (error) =>{
-      console.log("oops")
-    },
-    () =>{
-      uploadString(storageRef, message, 'data_url').then((snapshot) => {
-      console.log('Uploaded a data_url string!');
-      })
-    }
-  )
-}
-  const createQrImage = (e, props) => {
+    const storageRef = ref(storage, "qrLinks/" + qrName);
+    const uploadTask = uploadString(storageRef, message, 'data_url')
+    };
+
+  const createQrImage = (e) => {
     //prevents reload obv
     e.preventDefault();
     //gets the canvas from the "dom"
@@ -273,7 +271,7 @@ const getFileTest = async () =>{
     </>}
 
     <>
-    <form onSubmit={downloadQRCode}>
+    <form>
        <h1>Hello QRCode Test</h1>
        <input
         id="title"
@@ -310,7 +308,9 @@ const getFileTest = async () =>{
 
      {""}
      <button type="submit"> Download QR code image </button>
-     <button onClick={createQrImage}> Upload newly generated QR Image </button>
+     <button onClick={createQrImage}> convert to url string </button>
+     <button onClick={handleLinkUpload}> Upload newly generated QR Image </button>
+
    </form>
      <div className="qr-container__qr-code" ref={qrRef}>
       {code}
