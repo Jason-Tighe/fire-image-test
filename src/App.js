@@ -13,9 +13,8 @@ import QRCode from "qrcode.react";
 
 
 function App() {
-  const [fileTest, setFileTest] = useState([])
-  //"test" is the  database and state. Let's keep this going like so.
   const fileTestCollectionRef = collection(db, "fileTest")
+  const [fileTest, setFileTest] = useState([])
   const [newTitle, setNewTitle] = useState("")
   const [newDocInfo, setNewDocInfo] = useState("")
   const [link, setLink] = useState("")
@@ -27,9 +26,9 @@ function App() {
   const handleChange = e =>{
     if(e.target.files[0]){
       setImage(e.target.files[0])
-
     }
   }
+
 const [qrName, setQrName] = useState("")
 const [cubeFace, setCubeFace] = useState({
     link: ""
@@ -41,6 +40,7 @@ const [cubeFace, setCubeFace] = useState({
     }
     // Data URL string
     const message = qrCode
+    console.log(message)
     const storageRef = ref(storage, "qrLinks/" + message);
     const uploadTask = uploadBytesResumable(storageRef, image, metadata)
     uploadTask.on('state_changed',
@@ -61,12 +61,12 @@ const [cubeFace, setCubeFace] = useState({
     e.preventDefault();
     //gets the canvas from the "dom"
     let canvas = qrRef.current.querySelector("canvas");
-    console.log(canvas);
     //converts the qrRef(the QR code) to an image
     //I might just need set "image" as something
     let image = canvas.toDataURL("image/png");
     setQrCode(image)
-    handleLinkUpload(image)
+
+    // handleLinkUpload(image)
     setCubeFace({
       link: ""
     });
@@ -121,30 +121,9 @@ const handleNameChange = (e)=>{
      <QRCode
        level="Q"
        value={cubeFace.link}
-       // imageSettings={{
-       //   src: `${facebook}`,
-       //   x: null,
-       //   y: null,
-       //   height: 24,
-       //   width: 24,
-       //   excavate: true
-       // }}
      />
    );
 
-  // const fetchImages = async () => {
-  //       let result = await storage.ref().child("Name Of Your Files Map in storage").listAll();
-  //       let urlPromises = result.items.map((imageRef) =>
-  //         imageRef.getDownloadURL()
-  //       );
-  //
-  //       return Promise.all(urlPromises);
-  //     };
-  //
-  //     const loadImages = async () => {
-  //       const urls = await fetchImages();
-  //       setFiles(urls);
-  //     };
 
 // creating the storage, .ref is the refernce creating a new folder id, ".put" uploading.
 // .on, snapshot = current progress, error checking,
@@ -170,32 +149,13 @@ const handleUpload = () => {
 
 };
 
-// const handleUpload = () => {
-//   const uploadTask = storage.ref(`fileTest/${image.name}`).put(image)
-//   uploadTask.on(
-//     "state_changed",
-//     snapshot=>{},
-//     error=>{
-//       console.log(error)
-//     },
-//     ()=>{
-//       storage
-//         .ref("fileTest")
-//         .child(image.name)
-//         .getDownloadURL()
-//         .then(url=>{
-//           setLink(url)
-//         })
-//     }
-//   )
-// }
 
-  const handleTitleChange = e => {
+const handleTitleChange = e => {
   setNewTitle({ ...newTitle, [e.target.name]: e.target.value });
 };
 
 const handleDocInfoChange = e => {
-setNewDocInfo({ ...newDocInfo, [e.target.name]: e.target.value});
+  setNewDocInfo({ ...newDocInfo, [e.target.name]: e.target.value});
 };
 
 const updateTest = async (id, docInfo)=>{
@@ -210,23 +170,6 @@ const deleteTest = async (id) =>{
 }
 
 const getFileTest = async () =>{
-  //this works, but this requires that the useEffect has a dependency for fileTest.
-  // const items = []
-  // const querySnapshot = await getDocs(fileTestCollectionRef)
-  // querySnapshot.forEach((doc)=>{
-  //     items.push(doc.data())
-  //   })
-  // setFileTest(items)
-
-
-  //this works fine, but is rough to read.
-  // const data = await getDocs(fileTestCollectionRef)
-  // console.log(data)
-  // setFileTest(data.docs.map((doc)=>({...doc.data(), id: doc.id})))
-
-
-  //this was recomended through a video, but doesn't work, but if it does it won't require a dependency for useEffect.
-  //I'm able to get this to work now. the example have ref.onSnapshot, but that doens't seem to be a thing
   const abc = onSnapshot(fileTestCollectionRef, (querySnapshot)=>{
     const items = []
     querySnapshot.forEach((doc)=>{
@@ -237,9 +180,6 @@ const getFileTest = async () =>{
 }
 
   useEffect(()=>{
-    //this is getting and setting all items from the collection. I'll refernce how i've written stuff like this before.
-
-    // loadImages();
     getFileTest()
   },[])
 // have to look at this. Changed the onChange from the scaleable functino to a prop. It messed up because of the "name"
@@ -247,12 +187,11 @@ const getFileTest = async () =>{
     await addDoc(fileTestCollectionRef, {Title: newTitle, docInfo: newDocInfo})
   }
 
-  // var imageTest = storageRef("Images/crown.png")
-  const [dataB, setDataB] = useState(true);
+  const [dataB, setDataB] = useState(false);
   const closeDataList = () =>{
     setDataB(!dataB)
   }
-  const [file, setFile] = useState(true);
+  const [file, setFile] = useState(false);
   const closeFile = () =>{
     setFile(!file)
   }
@@ -356,12 +295,22 @@ const getFileTest = async () =>{
        onChange={handleQRChange}
        />
        <lable htmlFor="link"> Link </lable>
+       <input
+       id="test"
+       type="text"
+       name="link"
+       placeholder="add your link"
+
+       value={qrCode}
+       onChange={(e) => setQrCode(e.target.value)}
+       />
+       <lable htmlFor="link"> base64 </lable>
 
      <h2>Add a link!</h2>
 
      {""}
      <button type="submit"> Download QR code image </button>
-     <button onClick={handleLinkUpload}> Upload newly generated QR Image </button>
+     <button onClick={createQrImage}> Upload newly generated QR Image </button>
    </form>
      <div className="qr-container__qr-code" ref={qrRef}>
       {code}
