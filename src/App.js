@@ -1,5 +1,5 @@
 import {db, storage, storageRef} from './firebase-config'
-import {getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage"
+import {getStorage, ref, uploadBytesResumable, getDownloadURL, uploadString} from "firebase/storage"
 
 import { collection,
   getDocs,
@@ -19,7 +19,7 @@ function App() {
   const [newTitle, setNewTitle] = useState("")
   const [newDocInfo, setNewDocInfo] = useState("")
   const [link, setLink] = useState("")
-
+  const [qrCode, setQrCode] =useState(null)
   const [image, setImage] = useState(null)
   const [files, setFiles] = useState();
 
@@ -34,6 +34,46 @@ const [qrName, setQrName] = useState("")
 const [cubeFace, setCubeFace] = useState({
     link: ""
   });
+
+  const handleLinkUpload = () => {
+    const metadata = {
+      contentType: 'images/png'
+    }
+    // Data URL string
+    const message = qrCode
+    const storageRef = ref(storage, "qrLinks/" + message);
+    const uploadTask = uploadBytesResumable(storageRef, image, metadata)
+    uploadTask.on('state_changed',
+    (snapshot) => {
+      },
+    (error) =>{
+      console.log("oops")
+    },
+    () =>{
+      uploadString(storageRef, message, 'data_url').then((snapshot) => {
+      console.log('Uploaded a data_url string!');
+      })
+    }
+  )
+}
+  const createQrImage = (e, props) => {
+    //prevents reload obv
+    e.preventDefault();
+    //gets the canvas from the "dom"
+    let canvas = qrRef.current.querySelector("canvas");
+    console.log(canvas);
+    //converts the qrRef(the QR code) to an image
+    //I might just need set "image" as something
+    let image = canvas.toDataURL("image/png");
+    setQrCode(image)
+    handleLinkUpload(image)
+    setCubeFace({
+      link: ""
+    });
+    setQrName("");
+  };
+
+
 
 const qrRef = useRef();
 //this basically creates the image and allows us to download the image.
@@ -55,8 +95,11 @@ const downloadQRCode = (e, props) => {
   //does not work if just using {qrName}, just use qrName
   anchor.download = qrName
   console.log(qrName)
+  //mounts the anchor
   document.body.appendChild(anchor);
+  //this is function that causes the download
   anchor.click();
+  //unmounts the anchor
   document.body.removeChild(anchor);
 
   setCubeFace({
@@ -205,9 +248,17 @@ const getFileTest = async () =>{
   }
 
   // var imageTest = storageRef("Images/crown.png")
-
+  const [dataB, setDataB] = useState(true);
+  const closeDataList = () =>{
+    setDataB(!dataB)
+  }
+  const [file, setFile] = useState(true);
+  const closeFile = () =>{
+    setFile(!file)
+  }
   return (
     <div className="App">
+    {dataB ? <></> : <>
     <input
       placeholder="Title"
       onChange={(event) => {
@@ -250,7 +301,9 @@ const getFileTest = async () =>{
           </div>
         )
       })}
-
+      </>}
+    {file ? <></> :
+    <>
     <div>
     {""}
     <div> Uploading an image to storage</div>
@@ -278,15 +331,15 @@ const getFileTest = async () =>{
 
     </div>
     <img src={link} alt="..." />
-
+    </>}
 
     <>
     <form onSubmit={downloadQRCode}>
        <h1>Hello QRCode Test</h1>
        <input
-        id="name"
+        id="title"
         type="text"
-        name="title"
+        name="name"
         placeholder="name your file"
 
         value={qrName}
@@ -308,14 +361,12 @@ const getFileTest = async () =>{
 
      {""}
      <button type="submit"> Download QR code image </button>
+     <button onClick={handleLinkUpload}> Upload newly generated QR Image </button>
    </form>
-   <div className="qr-container__qr-code" ref={qrRef}>
-     {code}
-   </div>
-
-
+     <div className="qr-container__qr-code" ref={qrRef}>
+      {code}
+     </div>
     </>
-
 
     </div>
   )
