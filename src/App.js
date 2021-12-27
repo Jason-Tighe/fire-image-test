@@ -42,13 +42,13 @@ const [cubeFace, setCubeFace] = useState({
   });
 
 //i have to set qrCode to the url String before uploading.
-  const handleLinkUpload = (e) => {
-    e.preventDefault();
+  const handleLinkUpload = (qrFile) => {
+    // e.preventDefault();
     const metadata = {
       contentType: 'images/png'
     }
     // Data URL string
-    const message = qrCode
+    const message = qrFile
     console.log(message)
     const storageRef = ref(storage, "qrLinks/" + qrName);
     const uploadTask = uploadString(storageRef, message, 'data_url')
@@ -61,14 +61,14 @@ const [cubeFace, setCubeFace] = useState({
     let canvas = qrRef.current.querySelector("canvas");
     //converts the qrRef(the QR code) to an image
     //I might just need set "image" as something
-    let image = canvas.toDataURL("image/png");
-    setQrCode(image)
+    let qrFile = canvas.toDataURL("image/png");
+    setQrCode(qrFile)
 
-    // handleLinkUpload(image)
-    setCubeFace({
-      link: ""
-    });
-    setQrName("");
+    handleLinkUpload(qrFile)
+    // setCubeFace({
+    //   link: ""
+    // });
+    // setQrName("");
   };
 
 
@@ -271,7 +271,7 @@ const getFileTest = async () =>{
     </>}
 
     <>
-    <form>
+    <form onSubmit={downloadQRCode}>
        <h1>Hello QRCode Test</h1>
        <input
         id="title"
