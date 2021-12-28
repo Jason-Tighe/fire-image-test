@@ -140,6 +140,10 @@ const handleUpload = () => {
   () =>{
     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
       setLink(downloadURL)
+      setCubeFace({
+        link: downloadURL
+      })
+      setQrName(image.name)
       console.log('File available at', downloadURL);
     })
   }
