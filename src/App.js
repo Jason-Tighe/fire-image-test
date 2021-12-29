@@ -23,18 +23,18 @@ function App() {
 //4
   const [link, setLink] = useState("")
 //5
-  const [qrCode, setQrCode] =useState(null)
+  const [qrCode, setQrCode] =useState("")
 //6
   const [image, setImage] = useState(null)
 //7
   const [files, setFiles] = useState();
 
 
-  const handleChange = e =>{
-    if(e.target.files[0]){
-      setImage(e.target.files[0])
-    }
-  }
+  // const handleChange = (e) =>{
+  //   if(e.target.files[0]){
+  //     setImage(e.target.files[0])
+  //   }
+  // }
 
 const [qrName, setQrName] = useState("")
 const [cubeFace, setCubeFace] = useState({
@@ -48,27 +48,31 @@ const [cubeFace, setCubeFace] = useState({
       contentType: 'images/png'
     }
     // Data URL string
-    const message = qrFile
-    console.log(message)
-    const storageRef = ref(storage, "qrLinks/" + qrName);
-    const uploadTask = uploadString(storageRef, message, 'data_url')
+    //the qr code image that gets pushed is auto named QrImage if there is no name. Let's create two functions 1 strctly for links and 1 for files qr images. might be a bit redundent but should help clear up some questions going forward.
+    const qrStorageRef = ref(storage, "Images/QrImage/" + qrName);
+    const uploadTask = uploadString(qrStorageRef, qrFile, 'data_url')
+
     };
 
   const createQrImage = (e) => {
     //prevents reload obv
-    e.preventDefault();
+    // e.preventDefault();
     //gets the canvas from the "dom"
     let canvas = qrRef.current.querySelector("canvas");
     //converts the qrRef(the QR code) to an image
     //I might just need set "image" as something
     let qrFile = canvas.toDataURL("image/png");
+    //this sets the url_string
     setQrCode(qrFile)
-
+    //this passes the url_string to the handleLinkUpload function and pushes the qrcode to the firebase storage
     handleLinkUpload(qrFile)
-    // setCubeFace({
-    //   link: ""
-    // });
-    // setQrName("");
+
+    //clear states
+    setCubeFace({
+      link: ""
+    });
+    // setQrName("")
+    setQrCode("");
   };
 
 
@@ -83,6 +87,7 @@ const downloadQRCode = (e, props) => {
   console.log(canvas);
   //converts the qrRef(the QR code) to an image
   //I might just need set "image" as something
+  //so i cannot swap the png to svg. I can however redner the QrCode as a svg to begin with. I'll have to look into more options as well
   let image = canvas.toDataURL("image/png");
   console.log(image);
   //creates an anchor tag
@@ -125,7 +130,7 @@ const handleNameChange = (e)=>{
 
 // creating the storage, .ref is the refernce creating a new folder id, ".put" uploading.
 // .on, snapshot = current progress, error checking,
-const handleUpload = () => {
+const handleUpload = async () => {
   const metadata = {
     contentType: 'images/png'
   }
@@ -139,11 +144,13 @@ const handleUpload = () => {
   },
   () =>{
     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-      setLink(downloadURL)
+      // setLink(downloadURL)
       setCubeFace({
         link: downloadURL
       })
       setQrName(image.name)
+
+      createQrImage()
       console.log('File available at', downloadURL);
     })
   }
@@ -183,6 +190,7 @@ const getFileTest = async () =>{
 
   useEffect(()=>{
     getFileTest()
+
   },[])
 // have to look at this. Changed the onChange from the scaleable functino to a prop. It messed up because of the "name"
   const createTest = async () => {
@@ -217,9 +225,9 @@ const getFileTest = async () =>{
     {//this is itterating through the array of items in the collection. There is only 1 atm.
     //things to build out is the rest of the CRUD.
     }
-      {fileTest.map((item)=>{
+      {fileTest.map((item, index)=>{
         return(
-          <div key={item.id}>
+          <div key={index}>
           {""}
           <h1>Title: {item.Title}</h1>
           <h1>Doc Info: {item.docInfo}</h1>
@@ -248,10 +256,14 @@ const getFileTest = async () =>{
     <div>
     {""}
     <div> Uploading an image to storage</div>
-    <input type="file" onChange={handleChange}/>
-    <button
-    onClick={handleUpload}
-    >UpLoad</button>
+    <input type="file"
+
+    onChange={(e) => {
+       setImage(e.target.files[0]);
+     }}
+
+     />
+    <button type="button" onClick={handleUpload} >UpLoad</button>
     {/* basically the handleupload needs to be recreated for the new image to work.
       basically, once it creates a the image with downloadQRcode i would then need to fill this input as with that new file?
       maybe if i just do an if statement of like
@@ -286,7 +298,7 @@ const getFileTest = async () =>{
         value={qrName}
         onChange={handleNameChange}
        />
-       <lable htmlFor="qrName">Image Name </lable>
+       <label htmlFor="qrName">Image Name </label>
        <input
        id="link"
        type="text"
@@ -296,7 +308,7 @@ const getFileTest = async () =>{
        value={cubeFace.link}
        onChange={handleQRChange}
        />
-       <lable htmlFor="link"> Link </lable>
+       <label htmlFor="link"> Link </label>
        <input
        id="test"
        type="text"
@@ -306,14 +318,15 @@ const getFileTest = async () =>{
        value={qrCode}
        onChange={(e) => setQrCode(e.target.value)}
        />
-       <lable htmlFor="link"> base64 </lable>
+       <label htmlFor="link"> base64 </label>
 
      <h2>Add a link!</h2>
 
      {""}
-     <button type="submit"> Download QR code image </button>
-     <button onClick={createQrImage}> convert to url string </button>
-     <button onClick={handleLinkUpload}> Upload newly generated QR Image </button>
+
+     <button type="submit"> Just download a png of the qr code </button>
+     <button type="button" onClick={createQrImage}> convert qr code to an image and push to database</button>
+     <button type="button" onClick={handleLinkUpload}>  push to database </button>
 
    </form>
      <div className="qr-container__qr-code" ref={qrRef}>
