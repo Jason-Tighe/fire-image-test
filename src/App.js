@@ -75,7 +75,16 @@ const [cubeFace, setCubeFace] = useState({
     setQrCode("");
   };
 
-
+//this should delete the image, but first i'll have to list them out frist.
+const deleteQr = () =>{
+  const desertRef = ref(storage, "Images/QrImage/"+ qrName);
+  // Delete the file
+  deleteObject(desertRef).then(() => {
+    // File deleted successfully
+  }).catch((error) => {
+    // Uh-oh, an error occurred!
+  })
+}
 
 const qrRef = useRef();
 //this basically creates the image and allows us to download the image.
