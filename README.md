@@ -13,3 +13,5 @@ I'm able to now download QRcodes as .png files
 
 
 had some issues on my codesandbox have to figure out tomorrow
+
+need to continyue to add simple stuff like listing all, getting 1, delete, update basic crud 
