@@ -1,5 +1,5 @@
 import {db, storage, storageRef} from './firebase-config'
-import {getStorage, ref, uploadBytesResumable, getDownloadURL, uploadString} from "firebase/storage"
+import {getStorage, ref, uploadBytesResumable, getDownloadURL, uploadString, listAll, list} from "firebase/storage"
 
 import { collection,
   getDocs,
@@ -76,15 +76,26 @@ const [cubeFace, setCubeFace] = useState({
   };
 
 //this should delete the image, but first i'll have to list them out frist.
-const deleteQr = () =>{
-  const desertRef = ref(storage, "Images/QrImage/"+ qrName);
-  // Delete the file
-  deleteObject(desertRef).then(() => {
-    // File deleted successfully
-  }).catch((error) => {
-    // Uh-oh, an error occurred!
-  })
-}
+//directions say to use uuid, but i'm going to need to know how to get that, because all i know if the access token.
+// const deleteQr = () =>{
+//   const desertRef = ref(storage, "Images/QrImage/"+ qrName);
+//   // Delete the file
+//   deleteObject(desertRef).then(() => {
+//     // File deleted successfully
+//   }).catch((error) => {
+//     // Uh-oh, an error occurred!
+//   })
+// }
+//
+// const deleteFile = () =>{
+//   const desertRef = ref(storage, "Images/"+ qrName);
+//   // Delete the file
+//   deleteObject(desertRef).then(() => {
+//     // File deleted successfully
+//   }).catch((error) => {
+//     // Uh-oh, an error occurred!
+//   })
+// }
 
 const qrRef = useRef();
 //this basically creates the image and allows us to download the image.
@@ -199,12 +210,12 @@ const getFileTest = async () =>{
 
   useEffect(()=>{
     getFileTest()
-
   },[])
 // have to look at this. Changed the onChange from the scaleable functino to a prop. It messed up because of the "name"
   const createTest = async () => {
     await addDoc(fileTestCollectionRef, {Title: newTitle, docInfo: newDocInfo})
   }
+
 
   const [dataB, setDataB] = useState(false);
   const closeDataList = () =>{
