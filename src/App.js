@@ -75,28 +75,6 @@ const [cubeFace, setCubeFace] = useState({
     setQrCode("");
   };
 
-//this should delete the image, but first i'll have to list them out frist.
-//directions say to use uuid, but i'm going to need to know how to get that, because all i know if the access token.
-// const deleteQr = () =>{
-//   const desertRef = ref(storage, "Images/QrImage/"+ qrName);
-//   // Delete the file
-//   deleteObject(desertRef).then(() => {
-//     // File deleted successfully
-//   }).catch((error) => {
-//     // Uh-oh, an error occurred!
-//   })
-// }
-//
-// const deleteFile = () =>{
-//   const desertRef = ref(storage, "Images/"+ qrName);
-//   // Delete the file
-//   deleteObject(desertRef).then(() => {
-//     // File deleted successfully
-//   }).catch((error) => {
-//     // Uh-oh, an error occurred!
-//   })
-// }
-
 const qrRef = useRef();
 //this basically creates the image and allows us to download the image.
 const downloadQRCode = (e, props) => {
