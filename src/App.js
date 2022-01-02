@@ -207,7 +207,9 @@ const getFileTest = async () =>{
     setFileTest(items)
   })
 }
-
+//I'm going to have to create the CRUD for pushing jsut the urls? the refs? to a database.
+//I'll have to think out the schema(s)/Will have to think more about it once i decide if i'm passing a ref, or just the Url.
+//IF it's just a link, Title, Description, QRcode image Url?
   useEffect(()=>{
     getFileTest()
   },[])
@@ -215,36 +217,7 @@ const getFileTest = async () =>{
   const createTest = async () => {
     await addDoc(fileTestCollectionRef, {Title: newTitle, docInfo: newDocInfo})
   }
-const [allImages, setAllImages] = useState([])
 
-// const uploadTask = uploadString(qrStorageRef, qrFile, 'data_url')
-//TypeError: storageRef.listAll is not a function wtf... why is this happening....
-//maybe im going to have to go to pushing to a database.... not sure..
-const getFromFirebase = () =>{
-  let temp = []
-  const storageRef = ref(storage, "Images/")
-  storageRef.listAll().then(function (result) {
-            let path = storageRef.fullPath
-            path = path.replace(/\b\/\b(?!.*?\b\/\b)/, "%2F");
-            result.items.forEach(fileRef => {
-                temp.push({name:  fileRef.name, url: path + "%2F" + fileRef.name +"?alt=media"  })
-            });
-        }).then(()=>{
-
-            // set data in your any state variable for later use
-            setAllImages(temp)
-        }).catch(error => {
-            console.log(error);
-        })
-}
-
-const imageTest = allImages.map((image)=>{
-  return(
-    <div>
-    <img src={image}/>
-    </div>
-  )
-})
 
   const [dataB, setDataB] = useState(false);
   const closeDataList = () =>{
