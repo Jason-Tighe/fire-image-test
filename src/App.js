@@ -37,14 +37,9 @@ function App() {
   const [image, setImage] = useState(null);
   //7
   const [files, setFiles] = useState();
-
-  // const handleChange = (e) =>{
-  //   if(e.target.files[0]){
-  //     setImage(e.target.files[0])
-  //   }
-  // }
-
+//8
   const [qrName, setQrName] = useState("");
+//9
   const [cubeFace, setCubeFace] = useState({
     link: "",
   });
@@ -53,9 +48,8 @@ function App() {
     const qrStorageRef = ref(storage, "Images/QrImage/" + qrName);
     const uploadTask = uploadString(qrStorageRef, qrFile, "data_url");
     getDownloadURL(qrStorageRef).then((url) => {
-      setCubeFace({
-        link: url,
-      });
+      setLink(url);
+      createTest()
     });
   };
 
@@ -65,16 +59,10 @@ function App() {
   };
 
   const createQrImage = (e) => {
-    //prevents reload obv
-    // e.preventDefault();
-    //gets the canvas from the "dom"
+
     let canvas = qrRef.current.querySelector("canvas");
-    //converts the qrRef(the QR code) to an image
-    //I might just need set "image" as something
     let qrFile = canvas.toDataURL("image/png");
-    //this sets the url_string
     setQrCode(qrFile);
-    //this passes the url_string to the handleLinkUpload function and pushes the qrcode to the firebase storage
     handleLinkUpload(qrFile);
     // handleLinkImgUpload(qrFile)
     //clear states
@@ -88,29 +76,20 @@ function App() {
   const qrRef = useRef();
   //this basically creates the image and allows us to download the image.
   const downloadQRCode = (e, props) => {
-    //prevents reload obv
     e.preventDefault();
-    //gets the canvas from the "dom"
     let canvas = qrRef.current.querySelector("canvas");
     console.log(canvas);
-    //converts the qrRef(the QR code) to an image
-    //I might just need set "image" as something
-    //so i cannot swap the png to svg. I can however redner the QrCode as a svg to begin with. I'll have to look into more options as well
+
     let image = canvas.toDataURL("image/png");
     console.log(image);
-    //creates an anchor tag
+
     let anchor = document.createElement("a");
-    //makes the href of the tag to be the image
     anchor.href = image;
-    //the name of the download
-    //does not work if just using {qrName}, just use qrName
     anchor.download = qrName;
     console.log(qrName);
-    //mounts the anchor
+
     document.body.appendChild(anchor);
-    //this is function that causes the download
     anchor.click();
-    //unmounts the anchor
     document.body.removeChild(anchor);
 
     setCubeFace({
@@ -200,7 +179,7 @@ function App() {
     await addDoc(fileTestCollectionRef, {
       Title: newTitle,
       docInfo: newDocInfo,
-      QrSorce: cubeFace.link,
+      QrSorce: link,
     });
   };
 
@@ -231,14 +210,14 @@ function App() {
             }}
           />
           <input
-            id="link"
+            id="QrSorce"
             type="text"
             name="link"
             placeholder="add your link"
             value={cubeFace.link}
             onChange={handleQRChange}
           />
-          <button onClick={handleLinkUpload}> Create User</button>
+          <button onClick={createQrImage}> Create User</button>
 
           {
             //this is itterating through the array of items in the collection. There is only 1 atm.
