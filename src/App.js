@@ -53,18 +53,12 @@ function App() {
     });
   };
 
-  const handleLinkImgUpload = async (qrFile) => {
-    const qrStorageRef = ref(storage, "Images/QrImage/" + qrName);
-    const uploadTask = uploadString(qrStorageRef, qrFile, "data_url");
-  };
-
-  const createQrImage = (e) => {
+  const createQrImage = () => {
 
     let canvas = qrRef.current.querySelector("canvas");
     let qrFile = canvas.toDataURL("image/png");
     setQrCode(qrFile);
     handleLinkUpload(qrFile);
-    // handleLinkImgUpload(qrFile)
     //clear states
     setCubeFace({
       link: "",
@@ -179,7 +173,7 @@ function App() {
     await addDoc(fileTestCollectionRef, {
       Title: newTitle,
       docInfo: newDocInfo,
-      QrSorce: link,
+      link: link,
     });
   };
 
@@ -210,7 +204,7 @@ function App() {
             }}
           />
           <input
-            id="QrSorce"
+            id="link"
             type="text"
             name="link"
             placeholder="add your link"
@@ -229,8 +223,8 @@ function App() {
                 {""}
                 <h1>Title: {item.Title}</h1>
                 <h1>Doc Info: {item.docInfo}</h1>
-                <h1>QR Src: {item.QrSorce}</h1>
-                <img src={item.QrSorce} />
+                <h1>QR Src: {item.link}</h1>
+                <img src={item.link} />
 
                 <button
                   onClick={() => {
@@ -331,7 +325,7 @@ function App() {
             {" "}
             convert qr code to an image and push to database
           </button>
-          <button type="button" onClick={handleLinkImgUpload}>
+          <button type="button" onClick={handleLinkUpload}>
             {" "}
             push to database{" "}
           </button>
