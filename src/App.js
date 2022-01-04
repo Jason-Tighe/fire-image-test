@@ -45,16 +45,12 @@ function App() {
   });
 //This uploads the image and then generates the url and sets it.
   const handleLinkUpload = (qrFile) => {
-    const qrStorageRef = ref(storage, "Images/QrImage/" + newTitle);
+    const qrStorageRef = ref(storage, "Images/QrImage/" + qrName);
     const uploadTask = uploadString(qrStorageRef, qrFile, "data_url");
-    getDownloadURL(qrStorageRef)
-    .then((url) => {
+    getDownloadURL(qrStorageRef).then((url) => {
       setLink(url);
-    });
-    .then(() => {
       createTest()
     });
-
   };
 
   const createQrImage = () => {
@@ -64,11 +60,11 @@ function App() {
     setQrCode(qrFile);
     handleLinkUpload(qrFile);
     //clear states
-    // setCubeFace({
-    //   link: "",
-    // });
+    setCubeFace({
+      link: "",
+    });
     // setQrName("")
-    // setQrCode("");
+    setQrCode("");
   };
 
   const qrRef = useRef();
@@ -174,11 +170,10 @@ function App() {
 
   //I'll have to pass the URL.
   const createTest = async () => {
-    console.log(newTitle, newDocInfo, link)
     await addDoc(fileTestCollectionRef, {
       Title: newTitle,
       docInfo: newDocInfo,
-      link: link,
+      Link: link,
     });
   };
 
@@ -217,19 +212,14 @@ function App() {
             onChange={handleQRChange}
           />
           <button onClick={createQrImage}> Create User</button>
-
-          {
-            //this is itterating through the array of items in the collection. There is only 1 atm.
-            //things to build out is the rest of the CRUD.
-          }
           {fileTest.map((item, index) => {
             return (
               <div key={index} id={item.id}>
                 {""}
                 <h1>Title: {item.Title}</h1>
                 <h1>Doc Info: {item.docInfo}</h1>
-                <h1>QR Src: {item.link}</h1>
-                <img src={item.link} />
+                <h1>QR Src: {item.QrSorce}</h1>
+                <img src={item.QrSorce} />
 
                 <button
                   onClick={() => {
@@ -268,73 +258,10 @@ function App() {
             <button type="button" onClick={handleUpload}>
               UpLoad
             </button>
-            {/* basically the handleupload needs to be recreated for the new image to work.
-      basically, once it creates a the image with downloadQRcode i would then need to fill this input as with that new file?
-      maybe if i just do an if statement of like
-      "If value state is 0 then "", else valueState?" Can I even do something like this?
-      Maybe it'd just be best to create a second input pass the value into that like regular
-
-      */}
-            <h1>Here is your Link: {link} </h1>
-
-            <input
-              placeholder="Title"
-              value={link}
-              onChange={(event) => {
-                setNewTitle(event.target.value);
-              }}
-            />
-            <button onClick={createTest}> Create User</button>
           </div>
-          <img src={link} alt="..." />
         </>
       )}
-
       <>
-        <form onSubmit={downloadQRCode}>
-          <h1>Hello QRCode Test</h1>
-          <input
-            id="title"
-            type="text"
-            name="name"
-            placeholder="name your file"
-            value={newTitle}
-            onChange={handleTitleChange}
-          />
-          <label htmlFor="qrName">Image Name </label>
-          <input
-            id="link"
-            type="text"
-            name="link"
-            placeholder="add your link"
-            value={cubeFace.link}
-            onChange={handleQRChange}
-          />
-          <label htmlFor="link"> Link </label>
-          <input
-            id="test"
-            type="text"
-            name="link"
-            placeholder="add your link"
-            value={qrCode}
-            onChange={(e) => setQrCode(e.target.value)}
-          />
-          <label htmlFor="link"> base64 </label>
-
-          <h2>Add a link!</h2>
-
-          {""}
-
-          <button type="submit"> Just download a png of the qr code </button>
-          <button type="button" onClick={createQrImage}>
-            {" "}
-            convert qr code to an image and push to database
-          </button>
-          <button type="button" onClick={handleLinkUpload}>
-            {" "}
-            push to database{" "}
-          </button>
-        </form>
         <div className="qr-container__qr-code" ref={qrRef}>
           {code}
         </div>
