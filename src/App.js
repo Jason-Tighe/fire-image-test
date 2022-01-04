@@ -38,18 +38,17 @@ function App() {
   //7
   const [files, setFiles] = useState();
 //8
-  const [qrName, setQrName] = useState("");
-//9
   const [cubeFace, setCubeFace] = useState({
     link: "",
   });
 //This uploads the image and then generates the url and sets it.
   const handleLinkUpload = (qrFile) => {
-    const qrStorageRef = ref(storage, "Images/QrImage/" + qrName);
+    const qrStorageRef = ref(storage, "/QrImage/" + newTitle);
     const uploadTask = uploadString(qrStorageRef, qrFile, "data_url");
     getDownloadURL(qrStorageRef).then((url) => {
-      setLink(url);
+      setLink(url)
       createTest()
+
     });
   };
 
@@ -63,7 +62,6 @@ function App() {
     setCubeFace({
       link: "",
     });
-    // setQrName("")
     setQrCode("");
   };
 
@@ -79,8 +77,8 @@ function App() {
 
     let anchor = document.createElement("a");
     anchor.href = image;
-    anchor.download = qrName;
-    console.log(qrName);
+    anchor.download = newTitle;
+    console.log(newTitle);
 
     document.body.appendChild(anchor);
     anchor.click();
@@ -89,7 +87,7 @@ function App() {
     setCubeFace({
       link: "",
     });
-    setQrName("");
+    setNewTitle("");
   };
 
   const handleQRChange = (e) => {
@@ -97,10 +95,17 @@ function App() {
   };
 
   const handleNameChange = (e) => {
-    setQrName(e.target.value);
+    setNewTitle(e.target.value);
   };
 
-  const code = <QRCode level="Q" value={cubeFace.link} />;
+  const handleTitleChange = (e) => {
+    setNewTitle({ ...newTitle, [e.target.name]: e.target.value });
+  };
+
+  const handleDocInfoChange = (e) => {
+    setNewDocInfo({ ...newDocInfo, [e.target.name]: e.target.value });
+  };
+
 
   // creating the storage, .ref is the refernce creating a new folder id, ".put" uploading.
   // .on, snapshot = current progress, error checking,
@@ -122,7 +127,7 @@ function App() {
           setCubeFace({
             link: downloadURL,
           });
-          setQrName(image.name);
+          setNewTitle(image.name);
 
           createQrImage();
           console.log("File available at", downloadURL);
@@ -131,13 +136,7 @@ function App() {
     );
   };
 
-  const handleTitleChange = (e) => {
-    setNewTitle({ ...newTitle, [e.target.name]: e.target.value });
-  };
 
-  const handleDocInfoChange = (e) => {
-    setNewDocInfo({ ...newDocInfo, [e.target.name]: e.target.value });
-  };
 
   const updateTest = async (id, docInfo) => {
     const testDoc = doc(db, "fileTest", id);
@@ -160,13 +159,11 @@ function App() {
       setFileTest(items);
     });
   };
-  //I'm going to have to create the CRUD for pushing jsut the urls? the refs? to a database.
-  //I'll have to think out the schema(s)/Will have to think more about it once i decide if i'm passing a ref, or just the Url.
-  //IF it's just a link, Title, Description, QRcode image Url?
+
+
   useEffect(() => {
     getFileTest();
   }, []);
-  // have to look at this. Changed the onChange from the scaleable functino to a prop. It messed up because of the "name"
 
   //I'll have to pass the URL.
   const createTest = async () => {
@@ -185,6 +182,10 @@ function App() {
   const closeFile = () => {
     setFile(!file);
   };
+
+  const code = <QRCode level="Q" value={cubeFace.link} />;
+
+
   return (
     <div className="App">
       {dataB ? (
