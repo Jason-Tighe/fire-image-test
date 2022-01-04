@@ -45,12 +45,16 @@ function App() {
   });
 //This uploads the image and then generates the url and sets it.
   const handleLinkUpload = (qrFile) => {
-    const qrStorageRef = ref(storage, "Images/QrImage/" + qrName);
+    const qrStorageRef = ref(storage, "Images/QrImage/" + newTitle);
     const uploadTask = uploadString(qrStorageRef, qrFile, "data_url");
-    getDownloadURL(qrStorageRef).then((url) => {
+    getDownloadURL(qrStorageRef)
+    .then((url) => {
       setLink(url);
+    });
+    .then(() => {
       createTest()
     });
+
   };
 
   const createQrImage = () => {
@@ -60,11 +64,11 @@ function App() {
     setQrCode(qrFile);
     handleLinkUpload(qrFile);
     //clear states
-    setCubeFace({
-      link: "",
-    });
+    // setCubeFace({
+    //   link: "",
+    // });
     // setQrName("")
-    setQrCode("");
+    // setQrCode("");
   };
 
   const qrRef = useRef();
@@ -170,6 +174,7 @@ function App() {
 
   //I'll have to pass the URL.
   const createTest = async () => {
+    console.log(newTitle, newDocInfo, link)
     await addDoc(fileTestCollectionRef, {
       Title: newTitle,
       docInfo: newDocInfo,
@@ -293,8 +298,8 @@ function App() {
             type="text"
             name="name"
             placeholder="name your file"
-            value={qrName}
-            onChange={handleNameChange}
+            value={newTitle}
+            onChange={handleTitleChange}
           />
           <label htmlFor="qrName">Image Name </label>
           <input
