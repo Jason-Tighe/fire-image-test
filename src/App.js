@@ -170,7 +170,7 @@ function App() {
     await addDoc(fileTestCollectionRef, {
       Title: newTitle,
       docInfo: newDocInfo,
-      Link: link,
+      link: link,
     });
   };
 
@@ -219,8 +219,8 @@ function App() {
                 {""}
                 <h1>Title: {item.Title}</h1>
                 <h1>Doc Info: {item.docInfo}</h1>
-                <h1>QR Src: {item.QrSorce}</h1>
-                <img src={item.QrSorce} />
+                <h1>QR Src: {item.link}</h1>
+                <img src={item.link} />
 
                 <button
                   onClick={() => {
