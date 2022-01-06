@@ -154,7 +154,8 @@ function App() {
     const abc = onSnapshot(fileTestCollectionRef, (querySnapshot) => {
       const items = [];
       querySnapshot.forEach((doc) => {
-        items.push(doc.data());
+        // snapshot.docs.map((doc) => ({id: doc.id, ...doc.data()}))
+        items.push({id: doc.id, ...doc.data()});
       });
       setFileTest(items);
     });
