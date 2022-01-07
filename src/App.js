@@ -7,6 +7,7 @@ import {
   uploadString,
   listAll,
   list,
+  deleteObject,
 } from "firebase/storage";
 
 import {
@@ -48,7 +49,6 @@ function App() {
     getDownloadURL(qrStorageRef).then((url) => {
       setLink(url)
       createTest()
-
     });
   };
 
@@ -144,11 +144,35 @@ function App() {
     await updateDoc(testDoc, newFields);
   };
 
-  //does not work atm lol
+
   const deleteTest = async (id) => {
     const testDoc = doc(db, "fileTest", id);
     await deleteDoc(testDoc);
+    deleteStorageTest()
+    deleteImgStorageTest()
   };
+
+  // Create a reference to the file to delete
+const deleteStorageTest = async => () => {
+const deleteQrStorageRef = ref(storage, "/QrImage/" + newTitle);
+
+// Delete the file
+deleteObject(deleteQrStorageRef).then(() => {
+  console.log("nice")
+}).catch((error) => {
+  console.log("you suck")
+})
+}
+const deleteImgStorageTest = async => () => {
+const deleteImgStorageRef = ref(storage, "Images/" + newTitle);
+
+// Delete the file
+deleteObject(deleteImgStorageRef).then(() => {
+  console.log("nice")
+}).catch((error) => {
+  console.log("you suck")
+})
+}
 
   const getFileTest = async () => {
     const abc = onSnapshot(fileTestCollectionRef, (querySnapshot) => {
@@ -170,8 +194,8 @@ function App() {
   const createTest = async () => {
     await addDoc(fileTestCollectionRef, {
       Title: newTitle,
-      docInfo: newDocInfo,
-      link: link,
+      DocInfo: newDocInfo,
+      Link: link,
     });
   };
 
@@ -219,9 +243,9 @@ function App() {
               <div key={index} id={item.id}>
                 {""}
                 <h1>Title: {item.Title}</h1>
-                <h1>Doc Info: {item.docInfo}</h1>
-                <h1>QR Src: {item.link}</h1>
-                <img src={item.link} />
+                <h1>Doc Info: {item.DocInfo}</h1>
+                <h1>QR Src: {item.Link}</h1>
+                <img src={item.Link} />
 
                 <button
                   onClick={() => {
