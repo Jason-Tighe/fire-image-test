@@ -49,6 +49,7 @@ function App() {
     getDownloadURL(qrStorageRef).then((url) => {
       setLink(url)
       createTest()
+
     });
   };
 
@@ -153,7 +154,7 @@ function App() {
   };
 
   // Create a reference to the file to delete
-const deleteStorageTest = async => () => {
+const deleteStorageTest  = async () => {
 const deleteQrStorageRef = ref(storage, "/QrImage/" + newTitle);
 
 // Delete the file
@@ -163,7 +164,7 @@ deleteObject(deleteQrStorageRef).then(() => {
   console.log("you suck")
 })
 }
-const deleteImgStorageTest = async => () => {
+const deleteImgStorageTest  = async () => {
 const deleteImgStorageRef = ref(storage, "Images/" + newTitle);
 
 // Delete the file
