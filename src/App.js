@@ -31,7 +31,7 @@ function App() {
   //3
   const [newDocInfo, setNewDocInfo] = useState("");
   //4
-  const [link, setLink] = useState("");
+  const [link, setLink] = useState(null);
   //5
   const [qrCode, setQrCode] = useState("");
   //6
@@ -43,26 +43,28 @@ function App() {
     link: "",
   });
 //This uploads the image and then generates the url and sets it.
-  const handleLinkUpload = (qrFile) => {
-    const qrStorageRef = ref(storage, "/QrImage/" + newTitle);
-    const uploadTask = uploadString(qrStorageRef, qrFile, "data_url");
+  const handleLinkUpload = () => {
+    const qrStorageRef = ref(storage, "QrImage/" + newTitle);
+    const uploadTask = uploadString(qrStorageRef, qrCode, "data_url")
     getDownloadURL(qrStorageRef).then((url) => {
-      createTest(url)
-
+      setLink(url)
+      console.log(url)
+      // createTest()
     });
   };
+
 
   const createQrImage = () => {
 
     let canvas = qrRef.current.querySelector("canvas");
     let qrFile = canvas.toDataURL("image/png");
     setQrCode(qrFile);
-    handleLinkUpload(qrFile);
+    // handleLinkUpload(qrFile);
     //clear states
     setCubeFace({
       link: "",
     });
-    setQrCode("");
+    // setQrCode("");
   };
 
   const qrRef = useRef();
@@ -154,7 +156,7 @@ function App() {
 
   // Create a reference to the file to delete
 const deleteStorageTest  = async () => {
-const deleteQrStorageRef = ref(storage, "/QrImage/" + newTitle);
+const deleteQrStorageRef = ref(storage, "QrImage/" + newTitle);
 
 // Delete the file
 deleteObject(deleteQrStorageRef).then(() => {
@@ -191,11 +193,11 @@ deleteObject(deleteImgStorageRef).then(() => {
   }, []);
 
   //I'll have to pass the URL.
-  const createTest = async (url) => {
+  const createTest = async () => {
     await addDoc(fileTestCollectionRef, {
       Title: newTitle,
       DocInfo: newDocInfo,
-      Link: url,
+      Link: link,
     });
   };
 
@@ -237,7 +239,11 @@ deleteObject(deleteImgStorageRef).then(() => {
             value={cubeFace.link}
             onChange={handleQRChange}
           />
-          <button onClick={createQrImage}> Create User</button>
+          <button onClick={createQrImage}> Create Image</button>
+          <button onClick={handleLinkUpload}> Upload Image to Storage</button>
+          <button onClick={createTest}> Upload to Database</button>
+
+
           {fileTest.map((item, index) => {
             return (
               <div key={index} id={item.id}>
