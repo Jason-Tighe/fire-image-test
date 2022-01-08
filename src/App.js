@@ -47,8 +47,7 @@ function App() {
     const qrStorageRef = ref(storage, "/QrImage/" + newTitle);
     const uploadTask = uploadString(qrStorageRef, qrFile, "data_url");
     getDownloadURL(qrStorageRef).then((url) => {
-      setLink(url)
-      createTest()
+      createTest(url)
 
     });
   };
@@ -192,11 +191,11 @@ deleteObject(deleteImgStorageRef).then(() => {
   }, []);
 
   //I'll have to pass the URL.
-  const createTest = async () => {
+  const createTest = async (url) => {
     await addDoc(fileTestCollectionRef, {
       Title: newTitle,
       DocInfo: newDocInfo,
-      Link: link,
+      Link: url,
     });
   };
 
