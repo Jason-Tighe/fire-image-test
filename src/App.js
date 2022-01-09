@@ -193,8 +193,8 @@ deleteObject(deleteImgStorageRef).then(() => {
   }, []);
 
   //I'll have to pass the URL.
-  const createTest = async () => {
-    await addDoc(fileTestCollectionRef, {
+  const createTest = () => {
+    addDoc(fileTestCollectionRef, {
       Title: newTitle,
       DocInfo: newDocInfo,
       Link: link,
