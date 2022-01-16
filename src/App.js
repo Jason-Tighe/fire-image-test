@@ -45,34 +45,28 @@ function App() {
   //This uploads the image and then generates the url and sets it.
 
   //need to check URItoBlob
-  const handleLinkUpload = async () => {
+  const handleLinkUpload = () => {
     const qrStorageRef = ref(storage, "QrImage/" + newTitle);
     const uploadTask = uploadString(qrStorageRef, qrCode, "data_url");
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {
-        console.log("oops");
-      },
-      () => {
-        getDownloadURL(qrStorageRef.snapshot.ref).then((url) => {
-          setLink(url);
-          console.log(url);
-          // createTest()
-        });
+    return getDownloadURL(qrStorageRef)
+          .then((url) => {
+           setLink(url);
+        })
       }
-    );
-  };
-
-  const createQrImage = () => {
-    let canvas = qrRef.current.querySelector("canvas");
-    let qrFile = canvas.toDataURL("image/png");
-    setQrCode(qrFile);
-    handleLinkUpload(qrFile);
-    //clear states
-    setCubeFace({
-      link: "",
-    });
+//so what is happening. create image is the starting point, after it creates the image it then runs handleLinkUpload, it then runs createTest to add the linkt o the database.
+  const createQrImage =  () => {
+    // try {
+      let canvas =  qrRef.current.querySelector("canvas");
+      let qrFile =  canvas.toDataURL("image/png");
+      setQrCode(qrFile)
+      // handleLinkUpload(qrFile)
+      //clear states
+      setCubeFace({
+        link: "",
+      });
+    // } catch (err){
+    //   alert(err + "We caught something")
+    // }
     // setQrCode("");
   };
 
@@ -201,24 +195,42 @@ function App() {
   }, []);
 
   //I'll have to pass the URL.
+  // const createTest = () => {
+  //   addDoc(fileTestCollectionRef, {
+  //     Title: newTitle,
+  //     DocInfo: newDocInfo,
+  //     Link: link,
+  //   });
+  // };
   const createTest = () => {
-    addDoc(fileTestCollectionRef, {
+      addDoc(fileTestCollectionRef, {
       Title: newTitle,
       DocInfo: newDocInfo,
       Link: link,
     });
   };
 
-  useEffect(() => {
-    const createTest = async () => {
-      await addDoc(fileTestCollectionRef, {
-        Title: newTitle,
-        DocInfo: newDocInfo,
-        Link: link,
-      });
-    };
-    createTest();
-  }, [link]);
+  const compact = async() =>{
+    let canvas = await qrRef.current.querySelector("canvas");
+    let qrFile = await canvas.toDataURL("image/png");
+    // setQrCode(qrFile)
+    const qrStorageRef = await ref(storage, "QrImage/" + newTitle);
+    const uploadTask = await uploadString(qrStorageRef, qrFile, "data_url");
+    getDownloadURL(qrStorageRef)
+          .then((url) => {
+          addDoc(fileTestCollectionRef, {
+               Title: newTitle,
+               DocInfo: newDocInfo,
+               Link: url,
+             })
+        })
+
+  }
+
+  // useEffect(() => {
+  //
+  //   createTest();
+  // }, [link])
 
   const [dataB, setDataB] = useState(false);
   const closeDataList = () => {
@@ -257,9 +269,11 @@ function App() {
             value={cubeFace.link}
             onChange={handleQRChange}
           />
-          <button onClick={createQrImage}> Create Image</button>
+          <div>{link}</div>
+          <button onClick={compact}> Create Image</button>
           <button onClick={handleLinkUpload}> Upload Image to Storage</button>
-          <button onClick={createTest}> Upload to Database</button>
+          {// <button onClick={createTest}> Upload to Database</button>
+          }
 
           {fileTest.map((item, index) => {
             return (
