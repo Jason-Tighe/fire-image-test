@@ -140,20 +140,29 @@ function App() {
     );
   };
 
-  const updateTest = async (id, docInfo) => {
-    const testDoc = doc(db, "fileTest", id);
-    const newFields = { docInfo: "" };
-    await updateDoc(testDoc, newFields);
+  const updateTest = async (id, title) => {
+    // const testDoc = doc(db, "fileTest", id);
+    // const newFields = { docInfo: "" };
+    // await updateDoc(testDoc, newFields);
+    console.log(title)
+      console.log(id)
   };
 
-  const deleteTest = async (id) => {
-    const testDoc = doc(db, "fileTest", id);
-    await deleteDoc(testDoc);
-    deleteStorageTest();
-    deleteImgStorageTest();
+  //this works
+  const deleteTest = async (id, title) => {
+    try{
+      console.log(title)
+      const testDoc = await doc(db, "fileTest", id)
+      const deleteQrStorageRef = await ref(storage, "QrImage/" + title);
+      deleteDoc(testDoc).then((title)=>{
+        deleteObject(deleteQrStorageRef);
+      })
+    } catch (err){
+      console.log(err)
+    }
   };
 
-  // Create a reference to the file to delete
+  //this deletes the QR image that was created and uplaoded.
   const deleteStorageTest = async () => {
     const deleteQrStorageRef = ref(storage, "QrImage/" + newTitle);
 
@@ -166,6 +175,8 @@ function App() {
         console.log("you suck");
       });
   };
+
+  //this would delete the file that was uploaded
   const deleteImgStorageTest = async () => {
     const deleteImgStorageRef = ref(storage, "Images/" + newTitle);
 
@@ -337,7 +348,7 @@ function App() {
                 </button>
                 <button
                   onClick={() => {
-                    deleteTest(item.id);
+                    deleteTest(item.id, item.Title);
                   }}
                 >
                   {" "}
