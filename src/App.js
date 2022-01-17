@@ -140,10 +140,11 @@ function App() {
     );
   };
 
+//do i need an update option? prob to jsut rename i guess...
   const updateTest = async (id, title) => {
-    // const testDoc = doc(db, "fileTest", id);
-    // const newFields = { docInfo: "" };
-    // await updateDoc(testDoc, newFields);
+    const testDoc = doc(db, "fileTest", id);
+    const newFields = { docInfo: "" };
+    await updateDoc(testDoc, newFields);
     console.log(title)
       console.log(id)
   };
