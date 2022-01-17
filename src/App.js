@@ -132,8 +132,8 @@ function App() {
             link: downloadURL,
           });
           setNewTitle(image.name);
-
-          createQrImage();
+          compactFile()
+          // createQrImage();
           console.log("File available at", downloadURL);
         });
       }
@@ -226,6 +226,49 @@ function App() {
         })
 
   }
+
+  const compactFile = async () =>{
+    let canvas = await qrRef.current.querySelector("canvas");
+    let qrFile = await canvas.toDataURL("image/png");
+    // setQrCode(qrFile)
+    const qrStorageRef = await ref(storage, "QrImage/" + newTitle);
+    const uploadTask = await uploadString(qrStorageRef, qrFile, "data_url");
+    getDownloadURL(qrStorageRef)
+          .then((url) => {
+          addDoc(fileTestCollectionRef, {
+               Title: newTitle,
+               DocInfo: newDocInfo,
+               Link: url,
+             })
+        })
+  }
+  // const handleUpload = async () => {
+  //   const metadata = {
+  //     contentType: "images/png",
+  //   };
+  //   const storageRef = ref(storage, "Images/" + image.name);
+  //   const uploadTask = uploadBytesResumable(storageRef, image, metadata);
+  //   uploadTask.on(
+  //     "state_changed",
+  //     (snapshot) => {},
+  //     (error) => {
+  //       console.log("oops");
+  //     },
+  //     () => {
+  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+  //         // setLink(downloadURL)
+  //         setCubeFace({
+  //           link: downloadURL,
+  //         });
+  //         setNewTitle(image.name);
+  //
+  //         createQrImage();
+  //         console.log("File available at", downloadURL);
+  //       });
+  //     }
+  //   );
+  // };
+
 
   // useEffect(() => {
   //
