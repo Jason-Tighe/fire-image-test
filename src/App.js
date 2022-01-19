@@ -142,14 +142,17 @@ function App() {
 
 //do i need an update option? prob to jsut rename i guess...
   const updateTest = async (id, title) => {
-    const testDoc = doc(db, "fileTest", id);
-    const newFields = { docInfo: "" };
-    await updateDoc(testDoc, newFields);
-    console.log(title)
-      console.log(id)
+    try{
+      const testDoc = await doc(db, "fileTest", id);
+      await updateDoc(testDoc, {
+      Title: newTitle,
+      DocInfo: newDocInfo });
+    }catch(err){
+      console.log(err)
+    }
   };
 
-  //this works
+  //The only way to delete the file is by using the title, but I can't update the title in the update function. 
   const deleteTest = async (id, title) => {
     try{
       console.log(title)
@@ -161,34 +164,6 @@ function App() {
     } catch (err){
       console.log(err)
     }
-  };
-
-  //this deletes the QR image that was created and uplaoded.
-  const deleteStorageTest = async () => {
-    const deleteQrStorageRef = ref(storage, "QrImage/" + newTitle);
-
-    // Delete the file
-    deleteObject(deleteQrStorageRef)
-      .then(() => {
-        console.log("nice");
-      })
-      .catch((error) => {
-        console.log("you suck");
-      });
-  };
-
-  //this would delete the file that was uploaded
-  const deleteImgStorageTest = async () => {
-    const deleteImgStorageRef = ref(storage, "Images/" + newTitle);
-
-    // Delete the file
-    deleteObject(deleteImgStorageRef)
-      .then(() => {
-        console.log("nice");
-      })
-      .catch((error) => {
-        console.log("you suck");
-      });
   };
 
   const getFileTest = async () => {
@@ -206,14 +181,6 @@ function App() {
     getFileTest();
   }, []);
 
-  //I'll have to pass the URL.
-  // const createTest = () => {
-  //   addDoc(fileTestCollectionRef, {
-  //     Title: newTitle,
-  //     DocInfo: newDocInfo,
-  //     Link: link,
-  //   });
-  // };
   const createTest = () => {
       addDoc(fileTestCollectionRef, {
       Title: newTitle,
@@ -242,7 +209,6 @@ function App() {
   const compactFile = async () =>{
     let canvas = await qrRef.current.querySelector("canvas");
     let qrFile = await canvas.toDataURL("image/png");
-    // setQrCode(qrFile)
     const qrStorageRef = await ref(storage, "QrImage/" + newTitle);
     const uploadTask = await uploadString(qrStorageRef, qrFile, "data_url");
     getDownloadURL(qrStorageRef)
@@ -254,38 +220,7 @@ function App() {
              })
         })
   }
-  // const handleUpload = async () => {
-  //   const metadata = {
-  //     contentType: "images/png",
-  //   };
-  //   const storageRef = ref(storage, "Images/" + image.name);
-  //   const uploadTask = uploadBytesResumable(storageRef, image, metadata);
-  //   uploadTask.on(
-  //     "state_changed",
-  //     (snapshot) => {},
-  //     (error) => {
-  //       console.log("oops");
-  //     },
-  //     () => {
-  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-  //         // setLink(downloadURL)
-  //         setCubeFace({
-  //           link: downloadURL,
-  //         });
-  //         setNewTitle(image.name);
-  //
-  //         createQrImage();
-  //         console.log("File available at", downloadURL);
-  //       });
-  //     }
-  //   );
-  // };
 
-
-  // useEffect(() => {
-  //
-  //   createTest();
-  // }, [link])
 
   const [dataB, setDataB] = useState(false);
   const closeDataList = () => {
@@ -345,7 +280,7 @@ function App() {
                   }}
                 >
                   {" "}
-                  Increase Age
+                  Update Title
                 </button>
                 <button
                   onClick={() => {
