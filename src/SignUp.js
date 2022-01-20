@@ -1,6 +1,12 @@
-import React from 'react'
+import React, {useRef} from 'react'
+import {useAuth} from '../contexts/AuthContext'
 
-export default function SignUp() =>{
+export default function SignUp() => {
+    const emailRef = useRef()
+    const passwordRef = useRef()
+    const passwordConfirm = useRef()
+    const {signup} = useAuth()
+
   return(
   <form>
   <div class="form-group">
