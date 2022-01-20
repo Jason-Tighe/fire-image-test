@@ -140,19 +140,18 @@ function App() {
     );
   };
 
-//do i need an update option? prob to jsut rename i guess...
+//can't update file name, just going to allow to update the doc info if anything.
   const updateTest = async (id, title) => {
     try{
       const testDoc = await doc(db, "fileTest", id);
       await updateDoc(testDoc, {
-      Title: newTitle,
       DocInfo: newDocInfo });
     }catch(err){
       console.log(err)
     }
   };
 
-  //The only way to delete the file is by using the title, but I can't update the title in the update function. 
+  //The only way to delete the file is by using the title, but I can't update the title in the update function.
   const deleteTest = async (id, title) => {
     try{
       console.log(title)
