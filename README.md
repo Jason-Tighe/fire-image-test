@@ -19,3 +19,4 @@ need to continyue to add simple stuff like listing all, getting 1, delete, updat
 had to put some time into a codign challnage on codesandbox 
 
 long work day no time to actually commit the code, no progress
+Just spending some time reviewing auth stuff
