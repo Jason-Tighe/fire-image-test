@@ -5,7 +5,7 @@ export default function SignUp(){
     const emailRef = useRef()
     const passwordRef = useRef()
     const passwordConfirm = useRef()
-    const  createAccEmail = useAuth()
+    const {createAccEmail} = useAuth()
 
     const  handleSubmit = (e) => {
       e.preventDefault()
@@ -13,6 +13,7 @@ export default function SignUp(){
     }
 
   return(
+  <AuthProvider>
   <form>
   <div className="form-group">
     <label for="exampleInputEmail1">Email address</label>
@@ -33,5 +34,6 @@ export default function SignUp(){
   </div>
   <button type="submit" className="btn btn-primary">Submit</button>
 </form>
+</AuthProvider>
   )
 }
