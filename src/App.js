@@ -21,8 +21,8 @@ import {
 } from "firebase/firestore";
 import { useState, useEffect, useRef } from "react";
 import QRCode from "qrcode.react";
-import SignUp from './SignUp'
-import AuthProvider from './contexts/AuthContext'
+import SignUp from "./SignUp";
+import { AuthProvider } from "./contexts/AuthContext";
 
 export default function App() {
   const fileTestCollectionRef = collection(db, "fileTest");
@@ -50,22 +50,21 @@ export default function App() {
   const handleLinkUpload = () => {
     const qrStorageRef = ref(storage, "QrImage/" + newTitle);
     const uploadTask = uploadString(qrStorageRef, qrCode, "data_url");
-    return getDownloadURL(qrStorageRef)
-          .then((url) => {
-           setLink(url);
-        })
-      }
-//so what is happening. create image is the starting point, after it creates the image it then runs handleLinkUpload, it then runs createTest to add the linkt o the database.
-  const createQrImage =  () => {
+    return getDownloadURL(qrStorageRef).then((url) => {
+      setLink(url);
+    });
+  };
+  //so what is happening. create image is the starting point, after it creates the image it then runs handleLinkUpload, it then runs createTest to add the linkt o the database.
+  const createQrImage = () => {
     // try {
-      let canvas =  qrRef.current.querySelector("canvas");
-      let qrFile =  canvas.toDataURL("image/png");
-      setQrCode(qrFile)
-      // handleLinkUpload(qrFile)
-      //clear states
-      setCubeFace({
-        link: "",
-      });
+    let canvas = qrRef.current.querySelector("canvas");
+    let qrFile = canvas.toDataURL("image/png");
+    setQrCode(qrFile);
+    // handleLinkUpload(qrFile)
+    //clear states
+    setCubeFace({
+      link: "",
+    });
     // } catch (err){
     //   alert(err + "We caught something")
     // }
@@ -134,7 +133,7 @@ export default function App() {
             link: downloadURL,
           });
           setNewTitle(image.name);
-          compactFile()
+          compactFile();
           // createQrImage();
           console.log("File available at", downloadURL);
         });
@@ -142,28 +141,29 @@ export default function App() {
     );
   };
 
-//can't update file name, just going to allow to update the doc info if anything. //Maybe it'd be best to have another field with the name of the file and qr image but not have it as the title.
+  //can't update file name, just going to allow to update the doc info if anything. //Maybe it'd be best to have another field with the name of the file and qr image but not have it as the title.
   const updateTest = async (id, title) => {
-    try{
+    try {
       const testDoc = await doc(db, "fileTest", id);
       await updateDoc(testDoc, {
-      DocInfo: newDocInfo });
-    }catch(err){
-      console.log(err)
+        DocInfo: newDocInfo,
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 
   //The only way to delete the file is by using the title, but I can't update the title in the update function.
   const deleteTest = async (id, title) => {
-    try{
-      console.log(title)
-      const testDoc = await doc(db, "fileTest", id)
+    try {
+      console.log(title);
+      const testDoc = await doc(db, "fileTest", id);
       const deleteQrStorageRef = await ref(storage, "QrImage/" + title);
-      deleteDoc(testDoc).then((title)=>{
+      deleteDoc(testDoc).then((title) => {
         deleteObject(deleteQrStorageRef);
-      })
-    } catch (err){
-      console.log(err)
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -183,45 +183,41 @@ export default function App() {
   }, []);
 
   const createTest = () => {
-      addDoc(fileTestCollectionRef, {
+    addDoc(fileTestCollectionRef, {
       Title: newTitle,
       DocInfo: newDocInfo,
       Link: link,
     });
   };
 
-  const compact = async() =>{
+  const compact = async () => {
     let canvas = await qrRef.current.querySelector("canvas");
     let qrFile = await canvas.toDataURL("image/png");
     // setQrCode(qrFile)
     const qrStorageRef = await ref(storage, "QrImage/" + newTitle);
     const uploadTask = await uploadString(qrStorageRef, qrFile, "data_url");
-    getDownloadURL(qrStorageRef)
-          .then((url) => {
-          addDoc(fileTestCollectionRef, {
-               Title: newTitle,
-               DocInfo: newDocInfo,
-               Link: url,
-             })
-        })
+    getDownloadURL(qrStorageRef).then((url) => {
+      addDoc(fileTestCollectionRef, {
+        Title: newTitle,
+        DocInfo: newDocInfo,
+        Link: url,
+      });
+    });
+  };
 
-  }
-
-  const compactFile = async () =>{
+  const compactFile = async () => {
     let canvas = await qrRef.current.querySelector("canvas");
     let qrFile = await canvas.toDataURL("image/png");
     const qrStorageRef = await ref(storage, "QrImage/" + newTitle);
     const uploadTask = await uploadString(qrStorageRef, qrFile, "data_url");
-    getDownloadURL(qrStorageRef)
-          .then((url) => {
-          addDoc(fileTestCollectionRef, {
-               Title: newTitle,
-               DocInfo: newDocInfo,
-               Link: url,
-             })
-        })
-  }
-
+    getDownloadURL(qrStorageRef).then((url) => {
+      addDoc(fileTestCollectionRef, {
+        Title: newTitle,
+        DocInfo: newDocInfo,
+        Link: url,
+      });
+    });
+  };
 
   const [dataB, setDataB] = useState(false);
   const closeDataList = () => {
@@ -236,9 +232,10 @@ export default function App() {
 
   return (
     <div className="App">
-    <AuthProvider>
-    <SignUp />
-    </AuthProvider>
+        <div>
+          <SignUp />
+        </div>
+
       {dataB ? (
         <></>
       ) : (
@@ -266,7 +263,8 @@ export default function App() {
           <div>{link}</div>
           <button onClick={compact}> Create Image</button>
           <button onClick={handleLinkUpload}> Upload Image to Storage</button>
-          {// <button onClick={createTest}> Upload to Database</button>
+          {
+            // <button onClick={createTest}> Upload to Database</button>
           }
 
           {fileTest.map((item, index) => {
