@@ -1,23 +1,14 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import routes from './routes';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import paths from "./routes";
+import App from "../App";
+import SignUp from "../SignUp";
 
+export default function AppRouter() {
+  return (
+    <Router>
+    <SignUp/>
 
-const AppRouter = () => {
-	return (
-		<Router>
-			<Routes>
-				{routes.map(({ Component, key, path }) => (
-					<Route
-						key={key}
-						path={path}
-						exact
-						component={() => <Component page={key} />}
-					></Route>
-				))}
-			</Routes>
-		</Router>
-	);
-};
-
-export default AppRouter;
+    </Router>
+  );
+}

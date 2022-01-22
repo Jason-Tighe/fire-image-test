@@ -2,7 +2,7 @@ import React from 'react';
 import App from '../App';
 import SignUp from '../SignUp'
 
-const routes = [
+const paths = [
 	{
 		Component: SignUp,
 		key: 'SignUp',
@@ -15,4 +15,4 @@ const routes = [
 	}
 ];
 
-export default routes;
+export default paths;
