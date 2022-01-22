@@ -7,7 +7,7 @@ export function useAuth(){
   return useContext(AuthContext)
 }
 
-export default function Auth ({children})=>{
+export default function Auth ({children}){
   const [currentUser, setCurrentUser] = useState()
 
 

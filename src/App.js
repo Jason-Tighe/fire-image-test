@@ -22,7 +22,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import QRCode from "qrcode.react";
 
-function App() {
+export default function App() {
   const fileTestCollectionRef = collection(db, "fileTest");
   //1
   const [fileTest, setFileTest] = useState([]);
@@ -140,7 +140,7 @@ function App() {
     );
   };
 
-//can't update file name, just going to allow to update the doc info if anything.
+//can't update file name, just going to allow to update the doc info if anything. //Maybe it'd be best to have another field with the name of the file and qr image but not have it as the title.
   const updateTest = async (id, title) => {
     try{
       const testDoc = await doc(db, "fileTest", id);
@@ -321,5 +321,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
