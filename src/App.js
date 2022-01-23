@@ -232,12 +232,13 @@ export default function App() {
 
   return (
     <div className="App">
+      {dataB ? (
+        <>
         <div>
           <SignUp />
         </div>
 
-      {dataB ? (
-        <></>
+        </>
       ) : (
         <>
           <input

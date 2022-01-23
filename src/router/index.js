@@ -7,8 +7,7 @@ import SignUp from "../SignUp";
 export default function AppRouter() {
   return (
     <Router>
-    <App/>
-
+      <App/>
     </Router>
   );
 }
