@@ -38,7 +38,7 @@ export default function useAuth() {
         loginEmail,
         loginPassword
       );
-      console.log(user);
+      console.log("Welcome" + user);
     } catch (err) {
       console.err(err.message);
     }
@@ -88,6 +88,10 @@ export default function useAuth() {
 
         <button onClick={login}>Login</button>
       </div>
+      <h4>User Logged In</h4>
+      {user?.email}
+      <button onClick={logout}>Sign Out</button>
+
     </>
   );
 }
