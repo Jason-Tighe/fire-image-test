@@ -53,6 +53,7 @@ export default function useAuth() {
       <div>
         <h3>Register User</h3>
         <input
+        type="email"
           placeholder="Enter your email"
           onChange={(e) => {
             setRegisterEmail(e.target.value);
@@ -60,6 +61,7 @@ export default function useAuth() {
         />
 
         <input
+          type="password"
           placeholder="Create a password"
           onChange={(e) => {
             setRegisterPassword(e.target.value);
@@ -70,12 +72,14 @@ export default function useAuth() {
       <div>
         <h3></h3>
         <input
+          type="email"
           placeholder="Enter your email"
           onChange={(e) => {
             setLoginEmail(e.target.value);
           }}
         />
         <input
+          type="password"
           placeholder="Enter your password"
           onChange={(e) => {
             setLoginPassword(e.target.value);
