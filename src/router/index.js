@@ -1,13 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import paths from "./routes";
 import App from "../App";
-import SignUp from "../SignUp";
+import AuthContext from "../contexts/AuthContext";
 
 export default function AppRouter() {
   return (
     <Router>
-      <App/>
+        <Routes>
+          <Route exact path="/" component={App} />
+          <Route exact path="/signup" component={AuthContext} />
+        </Routes>
     </Router>
   );
 }

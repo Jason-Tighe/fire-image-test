@@ -1,7 +1,7 @@
 import React, {StrictMode} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import AppRouter from './router';
+import AppRouter from './router/index';
 import reportWebVitals from './reportWebVitals';
 import App from './App'
 

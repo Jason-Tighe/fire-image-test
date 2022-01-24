@@ -22,7 +22,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import QRCode from "qrcode.react";
 import SignUp from "./SignUp";
-import { AuthProvider } from "./contexts/AuthContext";
+import AuthContext from "./contexts/AuthContext";
 
 export default function App() {
   const fileTestCollectionRef = collection(db, "fileTest");
@@ -235,7 +235,8 @@ export default function App() {
       {dataB ? (
         <>
         <div>
-          <SignUp />
+        <AuthContext/>
+
         </div>
 
         </>
