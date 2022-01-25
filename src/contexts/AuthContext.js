@@ -19,6 +19,7 @@ export default function useAuth() {
     setUser(currentUser);
   });
 
+  //gmail is enabled will have to figure that out
   const register = async () => {
     try {
       const user = await createUserWithEmailAndPassword(
