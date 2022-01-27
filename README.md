@@ -20,3 +20,4 @@ had to put some time into a codign challnage on codesandbox
 
 long work day no time to actually commit the code, no progress
 Just spending some time reviewing auth continued. also mapping out new portfolio
+worked late only got to read/watch videos on auth 
