@@ -46,7 +46,16 @@ export default function App() {
   });
   //This uploads the image and then generates the url and sets it.
 
-  //need to check URItoBlob
+  //going to need to udpate filestruture.
+  //ex. users/uuid/qrImage
+  //ex. users/uuid/files
+
+  //going to need to update rule
+  //match {/users/{uid}/{image}}{
+    //allow read, write: if request.auth.uid == uid
+//}
+//two options either pass the auth down each time, or create a context.
+//will need more  work/study on context as it broke last time.
   const handleLinkUpload = () => {
     const qrStorageRef = ref(storage, "QrImage/" + newTitle);
     const uploadTask = uploadString(qrStorageRef, qrCode, "data_url");
