@@ -22,4 +22,4 @@ long work day no time to actually commit the code, no progress
 Just spending some time reviewing auth continued. also mapping out new portfolio
 worked late only got to read/watch videos on auth 
 
-worked on some coding challanges couldnt get to thisssss
+worked on some coding challanges couldnt get to thissssss
