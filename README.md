@@ -1,5 +1,5 @@
 Tested it out, while it can send files to fire-base storage, i cannot seem to pull the data. I'll need to find a a way to get the url.
-commit to stay green planning out tomorrows big build 
+commit to stay green planning out tomorrows big build
 
 
 need to read more firestore docs and include snapshot function
@@ -14,12 +14,14 @@ I'm able to now download QRcodes as .png files
 
 had some issues on my codesandbox have to figure out tomorrow
 
-need to continyue to add simple stuff like listing all, getting 1, delete, update basic crud 
+need to continyue to add simple stuff like listing all, getting 1, delete, update basic crud
 
-had to put some time into a codign challnage on codesandbox 
+had to put some time into a codign challnage on codesandbox
 
 long work day no time to actually commit the code, no progress
 Just spending some time reviewing auth continued. also mapping out new portfolio
-worked late only got to read/watch videos on auth 
+worked late only got to read/watch videos on auth
 
-worked on some coding challanges couldnt get to thissssss1s
+worked on some coding challanges couldnt get to this.
+
+Moving apartments has really slowed my progress.
