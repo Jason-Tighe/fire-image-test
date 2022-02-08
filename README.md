@@ -25,3 +25,4 @@ worked late only got to read/watch videos on auth
 worked on some coding challanges couldnt get to this.
 
 Moving apartments has really slowed my progress.
+Having little to no internet has really slowed this project.
