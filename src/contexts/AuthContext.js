@@ -17,6 +17,7 @@ export default function useAuth() {
 
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
+    console.log(user)
   });
 
   //gmail is enabled will have to figure that outt
