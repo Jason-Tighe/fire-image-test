@@ -238,6 +238,7 @@ export default function App() {
   };
 
   const code = <QRCode level="Q" value={cubeFace.link} />;
+  //to shorten links I'm going to have to deploy this first since it needs a domain name.
 
   return (
     <div className="App">
