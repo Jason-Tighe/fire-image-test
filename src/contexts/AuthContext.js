@@ -5,6 +5,8 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  signInWithPopup,
+  GoogleAuthProvider
 } from "firebase/auth";
 
 export default function useAuth() {
@@ -16,7 +18,7 @@ export default function useAuth() {
   const [user, setUser] = useState({});
 
   onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
+    setUser(currentUser)
     console.log(user)
   });
 
@@ -33,6 +35,21 @@ export default function useAuth() {
       console.err(err.message);
     }
   };
+
+  const googleLogin = async () =>{
+    try{
+      const user = await signInWithPopup(auth, new GoogleAuthProvider())
+      // .then((result)=>{
+      //   const credential = GoogleAuthProvider.credentialFromResult(result);
+      //   const token = credential.accessToken
+      //   const user = result.user
+      // })
+      console.log("this is theBoi" + user)
+    } catch (err){
+      console.err(err.message)
+    }
+  }
+
   const login = async () => {
     try {
       const user = await signInWithEmailAndPassword(
@@ -87,12 +104,12 @@ export default function useAuth() {
             setLoginPassword(e.target.value);
           }}
         />
-
         <button onClick={login}>Login</button>
       </div>
       <h4>User Logged In</h4>
       {user?.email}
       <button onClick={logout}>Sign Out</button>
+      <button onClick={googleLogin}> Sign in with Google </button>
 
     </>
   );
