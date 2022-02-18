@@ -39,14 +39,16 @@ export default function useAuth() {
   const googleLogin = async () =>{
     try{
       const user = await signInWithPopup(auth, new GoogleAuthProvider())
-      // .then((result)=>{
-      //   const credential = GoogleAuthProvider.credentialFromResult(result);
-      //   const token = credential.accessToken
-      //   const user = result.user
-      // })
-      console.log("this is theBoi" + user)
+      .then((result)=>{
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        console.log("credential:" + credential)
+        const token = credential.accessToken
+        console.log("token:" + credential.accessToken)
+        const user = result.user
+        console.log("user:" + result.user)
+      })
     } catch (err){
-      console.err(err.message)
+      console.log(err.message)
     }
   }
 
