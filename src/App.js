@@ -228,7 +228,7 @@ export default function App() {
     });
   };
 
-  const [dataB, setDataB] = useState(false);
+  const [dataB, setDataB] = useState(true);
   const closeDataList = () => {
     setDataB(!dataB);
   };
@@ -246,12 +246,14 @@ export default function App() {
         <>
         <div>
         <AuthContext/>
-
         </div>
 
         </>
       ) : (
         <>
+        <div className="qr-container__qr-code" ref={qrRef}>
+          {code}
+        </div>
           <input
             placeholder="Title"
             onChange={(event) => {
@@ -307,6 +309,7 @@ export default function App() {
               </div>
             );
           })}
+
         </>
       )}
       {file ? (
@@ -328,11 +331,6 @@ export default function App() {
           </div>
         </>
       )}
-      <>
-        <div className="qr-container__qr-code" ref={qrRef}>
-          {code}
-        </div>
-      </>
     </div>
   );
 }
