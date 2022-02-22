@@ -242,14 +242,16 @@ export default function App() {
 
   return (
     <div className="App">
+
       {dataB ? (
         <>
         <div>
         <AuthContext/>
         </div>
-
         </>
       ) : (
+        <>
+      {file ? (
         <>
         <div className="qr-container__qr-code" ref={qrRef}>
           {code}
@@ -277,6 +279,8 @@ export default function App() {
           <div>{link}</div>
           <button onClick={compact}> Create Image</button>
           <button onClick={handleLinkUpload}> Upload Image to Storage</button>
+          <button onClick={closeFile}>Generate QR code with a File?</button>
+
           {
             // <button onClick={createTest}> Upload to Database</button>
           }
@@ -311,11 +315,11 @@ export default function App() {
           })}
 
         </>
-      )}
-      {file ? (
-        <></>
       ) : (
         <>
+          <div className="qr-container__qr-code" ref={qrRef}>
+          {code}
+          </div>
           <div>
             {""}
             <div> Uploading an image to storage</div>
@@ -328,8 +332,39 @@ export default function App() {
             <button type="button" onClick={handleUpload}>
               UpLoad
             </button>
+            <button onClick={closeFile}>Generate QR code with a link?</button>
           </div>
+          {fileTest.map((item, index) => {
+            return (
+              <div key={index} id={item.id}>
+                {""}
+                <h1>Title: {item.Title}</h1>
+                <h1>Doc Info: {item.DocInfo}</h1>
+                <h1>QR Src: {item.Link}</h1>
+                <img src={item.Link} />
+
+                <button
+                  onClick={() => {
+                    updateTest(item.id, item.Title);
+                  }}
+                >
+                  {" "}
+                  Update Title
+                </button>
+                <button
+                  onClick={() => {
+                    deleteTest(item.id, item.Title);
+                  }}
+                >
+                  {" "}
+                  Delete User
+                </button>
+              </div>
+            );
+          })}
         </>
+      )}
+      </>
       )}
     </div>
   );
