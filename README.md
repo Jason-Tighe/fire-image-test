@@ -5,7 +5,7 @@ commit to stay green planning out tomorrows big build
 need to read more firestore docs and include snapshot function
 -I've got this working, but now i'm working on the full logic process
 
-don't have a repo to update, because i did it in codesandbox
+don't have a repo to update, because i did it in codesandbox1
 
 https://codesandbox.io/s/qrcode-test-d16zm?file=/src/App.js
 
