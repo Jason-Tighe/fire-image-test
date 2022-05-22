@@ -29,3 +29,4 @@ Having little to no internet has really slowed this project.
 Finally got internet setup!!@!!!!!! working on a side project
 updated firebase rules!!!
 11
+1
