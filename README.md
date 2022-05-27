@@ -12,7 +12,7 @@ https://codesandbox.io/s/qrcode-test-d16zm?file=/src/App.js
 I'm able to now download QRcodes as .png files....
 11
 1
-had some issues on my codesandbox have to figure out tomorrow
+had some issues on my codesandbox have to figure out tomorrow3
 
 need to continue to add simple stuff like listing all, getting 1, delete, update basic crud
 
