@@ -9,9 +9,8 @@ don't have a repo to update, because i did it in codesandbox1
 
 https://codesandbox.io/s/qrcode-test-d16zm?file=/src/App.js
 
-I'm able to now download QRcodes as .png files....,..1
-11
-1
+I'm able to now download QRcodes as .png files....
+
 had some issues on my codesandbox have to figure out tomorrow3
 
 need to continue to add simple stuff like listing all, getting 1, delete, update basic crud
@@ -28,5 +27,3 @@ Moving apartments has really slowed my progress.
 Having little to no internet has really slowed this project.
 Finally got internet setup!!@!!!!!! working on a side project
 updated firebase rules!!!
-11
-1
