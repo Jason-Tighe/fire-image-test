@@ -27,3 +27,4 @@ Moving apartments has really slowed my progress.
 Having little to no internet has really slowed this project.
 Finally got internet setup!!@!!!!!! working on a side project
 updated firebase rules!!!
+1
