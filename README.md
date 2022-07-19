@@ -9,7 +9,7 @@ don't have a repo to update, because i did it in codesandbox1
 
 https://codesandbox.io/s/qrcode-test-d16zm?file=/src/App.js
 
-I'm able to now download QRcodes as .png files.......
+I'm able to now download QRcodes as .png files..... 
 
 had some issues on my codesandbox have to figure out tomorrow3
 
