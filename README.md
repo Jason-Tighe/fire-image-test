@@ -15,7 +15,8 @@ had some issues on my codesandbox have to figure out tomorrow3
 
 need to continue to add simple stuff like listing all, getting 1, delete, update basic crud
 
-had to put some time into a coding challenge on codesandbox
+had to put some time into a coding challenge on codesandbox.
+
 1
 long work day no time to actually commit the code, no progress
 Just spending some time reviewing auth continued. also mapping out new portfolio
